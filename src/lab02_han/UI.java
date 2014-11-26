@@ -249,6 +249,60 @@ public class UI extends JFrame
 			}
 		});
 		
+		send2.send.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				MyDialog md = new MyDialog(UI.this,"提示",true,"发送成功");
+				md.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			}
+		});
+		send2.zan.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if (send2.zan.getText().equals("赞"))
+				{
+					send2.zan.setText("取消赞");
+					send2.label.setVisible(true);
+				
+				}
+				else
+				{
+					send2.zan.setText("赞");
+					send2.label.setVisible(false);
+					
+				}
+			}
+		});
+		
+		send3.send.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				MyDialog md = new MyDialog(UI.this,"提示",true,"发送成功");
+				md.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			}
+		});
+		send3.zan.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if (send3.zan.getText().equals("赞"))
+				{
+					send3.zan.setText("取消赞");
+					send3.label.setVisible(true);
+				
+				}
+				else
+				{
+					send3.zan.setText("赞");
+					send3.label.setVisible(false);
+					
+				}
+			}
+		});
+		
 		
 	}
 	
@@ -279,8 +333,8 @@ public class UI extends JFrame
 				{
 					check_state=6; //110
 					p_result.removeAll();
-					jsp1.setPreferredSize(new Dimension(600,240));
-					jsp2.setPreferredSize(new Dimension(600,240));
+					jsp1.setPreferredSize(new Dimension(600,244));
+					jsp2.setPreferredSize(new Dimension(600,244));
 					
 					p_result.add(p_baidu, BorderLayout.NORTH);
 					p_result.add(p_youdao, BorderLayout.CENTER);
@@ -292,20 +346,20 @@ public class UI extends JFrame
 				{
 					check_state=5; //101
 					p_result.removeAll();
-					jsp1.setPreferredSize(new Dimension(600,240));
+					jsp1.setPreferredSize(new Dimension(600,244));
 					
-					jsp3.setPreferredSize(new Dimension(600,240));
+					jsp3.setPreferredSize(new Dimension(600,244));
 					p_result.add(p_baidu, BorderLayout.NORTH);
 					
 					p_result.add(p_jinshan, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}
-				else //000
+				else if(check_state==0)//000
 				{
 					check_state=4; //100
 					p_result.removeAll();
-					jsp1.setPreferredSize(new Dimension(600,480));
+					jsp1.setPreferredSize(new Dimension(600,560));
 					p_result.add(p_baidu, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
@@ -319,8 +373,8 @@ public class UI extends JFrame
 				{
 					check_state = 3; //011
 					p_result.removeAll();
-					jsp2.setPreferredSize(new Dimension(600,240));
-					jsp3.setPreferredSize(new Dimension(600,240));
+					jsp2.setPreferredSize(new Dimension(600,244));
+					jsp3.setPreferredSize(new Dimension(600,244));
 					p_result.add(p_youdao, BorderLayout.NORTH);
 					p_result.add(p_jinshan, BorderLayout.SOUTH);
 					p_result.validate();
@@ -330,7 +384,7 @@ public class UI extends JFrame
 				{
 					check_state = 2; // 010
 					p_result.removeAll();
-					jsp2.setPreferredSize(new Dimension(600,480));
+					jsp2.setPreferredSize(new Dimension(600,560));
 					p_result.add(p_youdao, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
@@ -339,12 +393,12 @@ public class UI extends JFrame
 				{
 					check_state = 1; // 001
 					p_result.removeAll();
-					jsp3.setPreferredSize(new Dimension(600,480));
+					jsp3.setPreferredSize(new Dimension(600,560));
 					p_result.add(p_jinshan, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}
-				else //100
+				else if (check_state==4)//100
 				{
 					check_state = 0; // 000
 					p_result.removeAll();
@@ -399,8 +453,8 @@ public class UI extends JFrame
 				{
 					check_state=6; //110
 					p_result.removeAll();
-					jsp1.setPreferredSize(new Dimension(600,240));
-					jsp2.setPreferredSize(new Dimension(600,240));
+					jsp1.setPreferredSize(new Dimension(600,244));
+					jsp2.setPreferredSize(new Dimension(600,244));
 					
 					p_result.add(p_baidu, BorderLayout.NORTH);
 					p_result.add(p_youdao, BorderLayout.CENTER);
@@ -412,20 +466,20 @@ public class UI extends JFrame
 				{
 					check_state=3; //011
 					p_result.removeAll();
-					jsp2.setPreferredSize(new Dimension(600,240));
+					jsp2.setPreferredSize(new Dimension(600,244));
 					
-					jsp3.setPreferredSize(new Dimension(600,240));
+					jsp3.setPreferredSize(new Dimension(600,244));
 					p_result.add(p_youdao, BorderLayout.NORTH);
 					
 					p_result.add(p_jinshan, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}
-				else //000
+				else if (check_state==0)//000
 				{
 					check_state=2; //010
 					p_result.removeAll();
-					jsp2.setPreferredSize(new Dimension(600,540));
+					jsp2.setPreferredSize(new Dimension(600,560));
 					p_result.add(p_youdao, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
@@ -439,8 +493,8 @@ public class UI extends JFrame
 				{
 					check_state = 5; //101
 					p_result.removeAll();
-					jsp1.setPreferredSize(new Dimension(600,240));
-					jsp3.setPreferredSize(new Dimension(600,240));
+					jsp1.setPreferredSize(new Dimension(600,244));
+					jsp3.setPreferredSize(new Dimension(600,244));
 					p_result.add(p_baidu, BorderLayout.NORTH);
 					p_result.add(p_jinshan, BorderLayout.SOUTH);
 					p_result.validate();
@@ -448,9 +502,9 @@ public class UI extends JFrame
 				}
 				else if (check_state==6)// 110
 				{
-					check_state = 2; // 100
+					check_state = 4; // 100
 					p_result.removeAll();
-					jsp1.setPreferredSize(new Dimension(600,480));
+					jsp1.setPreferredSize(new Dimension(600,560));
 					p_result.add(p_baidu, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
@@ -459,12 +513,12 @@ public class UI extends JFrame
 				{
 					check_state = 1; // 001
 					p_result.removeAll();
-					jsp3.setPreferredSize(new Dimension(600,540));
+					jsp3.setPreferredSize(new Dimension(600,560));
 					p_result.add(p_jinshan, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}
-				else //010
+				else if (check_state == 2)//010
 				{
 					check_state = 0; // 000
 					p_result.removeAll();
@@ -506,8 +560,8 @@ public class UI extends JFrame
 				{
 					check_state=5; //101
 					p_result.removeAll();
-					jsp1.setPreferredSize(new Dimension(600,240));
-					jsp3.setPreferredSize(new Dimension(600,240));
+					jsp1.setPreferredSize(new Dimension(600,244));
+					jsp3.setPreferredSize(new Dimension(600,244));
 					
 					p_result.add(p_baidu, BorderLayout.NORTH);
 					p_result.add(p_jinshan, BorderLayout.CENTER);
@@ -519,19 +573,19 @@ public class UI extends JFrame
 				{
 					check_state=3; //011
 					p_result.removeAll();
-					jsp2.setPreferredSize(new Dimension(600,240));
-					jsp3.setPreferredSize(new Dimension(600,240));
+					jsp2.setPreferredSize(new Dimension(600,244));
+					jsp3.setPreferredSize(new Dimension(600,244));
 					p_result.add(p_youdao, BorderLayout.NORTH);
 					
 					p_result.add(p_jinshan, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}
-				else //000
+				else if (check_state==0)//000
 				{
 					check_state=1; //001
 					p_result.removeAll();
-					jsp3.setPreferredSize(new Dimension(600,540));
+					jsp3.setPreferredSize(new Dimension(600,560));
 					p_result.add(p_jinshan, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
@@ -550,8 +604,8 @@ public class UI extends JFrame
 				{
 					check_state = 6; //110
 					p_result.removeAll();
-					jsp1.setPreferredSize(new Dimension(600,240));
-					jsp2.setPreferredSize(new Dimension(600,240));
+					jsp1.setPreferredSize(new Dimension(600,244));
+					jsp2.setPreferredSize(new Dimension(600,244));
 					p_result.add(p_baidu, BorderLayout.NORTH);
 					p_result.add(p_youdao, BorderLayout.SOUTH);
 					p_result.validate();
@@ -561,7 +615,7 @@ public class UI extends JFrame
 				{
 					check_state = 4; // 100
 					p_result.removeAll();
-					jsp1.setPreferredSize(new Dimension(600,480));
+					jsp1.setPreferredSize(new Dimension(600,560));
 					p_result.add(p_baidu, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
@@ -570,12 +624,12 @@ public class UI extends JFrame
 				{
 					check_state = 2; // 010
 					p_result.removeAll();
-					jsp2.setPreferredSize(new Dimension(600,540));
+					jsp2.setPreferredSize(new Dimension(600,560));
 					p_result.add(p_youdao, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}
-				else //001
+				else if (check_state==1)//001
 				{
 					check_state = 0; // 000
 					p_result.removeAll();
