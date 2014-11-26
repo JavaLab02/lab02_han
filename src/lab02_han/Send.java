@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.*;
-
+@SuppressWarnings("serial")
 public class Send extends JPanel
 {
 	JTextField input = new JTextField(20);

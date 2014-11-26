@@ -10,6 +10,7 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
+@SuppressWarnings("serial")
 public class UI extends JFrame
 {
 	
@@ -253,8 +254,8 @@ public class UI extends JFrame
 	
 	private void update_check(Object s)
 	{
-		Component[] components = p_result.getComponents();
-		int len  = components.length;
+		//Component[] components = p_result.getComponents();
+		//int len  = components.length;
 		//LayoutManager layout = p_result.getLayout();
 		if (s==baidu)
 		{
@@ -272,6 +273,7 @@ public class UI extends JFrame
 					p_result.add(p_youdao, BorderLayout.CENTER);
 					p_result.add(p_jinshan, BorderLayout.SOUTH);
 					p_result.validate();
+					p_result.repaint();
 				}
 				else if (check_state==2) //010
 				{
@@ -284,6 +286,7 @@ public class UI extends JFrame
 					p_result.add(p_youdao, BorderLayout.CENTER);
 					
 					p_result.validate();
+					p_result.repaint();
 				}
 				else if (check_state==1) //001
 				{
@@ -296,6 +299,7 @@ public class UI extends JFrame
 					
 					p_result.add(p_jinshan, BorderLayout.CENTER);
 					p_result.validate();
+					p_result.repaint();
 				}
 				else //000
 				{
@@ -304,6 +308,7 @@ public class UI extends JFrame
 					jsp1.setPreferredSize(new Dimension(600,480));
 					p_result.add(p_baidu, BorderLayout.CENTER);
 					p_result.validate();
+					p_result.repaint();
 				}
 				
 			}
@@ -319,6 +324,7 @@ public class UI extends JFrame
 					p_result.add(p_youdao, BorderLayout.NORTH);
 					p_result.add(p_jinshan, BorderLayout.SOUTH);
 					p_result.validate();
+					p_result.repaint();
 				}
 				else if (check_state==6)// 110
 				{
@@ -327,6 +333,7 @@ public class UI extends JFrame
 					jsp2.setPreferredSize(new Dimension(600,480));
 					p_result.add(p_youdao, BorderLayout.CENTER);
 					p_result.validate();
+					p_result.repaint();
 				}
 				else if (check_state==5)// 101
 				{
@@ -335,6 +342,7 @@ public class UI extends JFrame
 					jsp3.setPreferredSize(new Dimension(600,480));
 					p_result.add(p_jinshan, BorderLayout.CENTER);
 					p_result.validate();
+					p_result.repaint();
 				}
 				else //100
 				{
@@ -343,6 +351,7 @@ public class UI extends JFrame
 					JLabel temp = new JLabel("未选中任何词典");
 					p_result.add(temp, BorderLayout.CENTER);
 					p_result.validate();
+					p_result.repaint();
 				}
 				
 				
@@ -367,10 +376,12 @@ public class UI extends JFrame
 			*/
 			if (youdao.isSelected()) //变为选中
 			{
-				//101-111
-				//100-110
-				//001-011
-				//000-010
+				/*
+				*101->111
+				*100->110
+				*001->011
+				*000->010
+				*/
 				if (check_state==5)//101
 				{
 					check_state=7;//111
@@ -382,6 +393,7 @@ public class UI extends JFrame
 					p_result.add(p_youdao, BorderLayout.CENTER);
 					p_result.add(p_jinshan, BorderLayout.SOUTH);
 					p_result.validate();
+					p_result.repaint();
 				}
 				else if (check_state==4) //100
 				{
@@ -394,6 +406,7 @@ public class UI extends JFrame
 					p_result.add(p_youdao, BorderLayout.CENTER);
 					
 					p_result.validate();
+					p_result.repaint();
 				}
 				else if (check_state==1) //001
 				{
@@ -406,14 +419,16 @@ public class UI extends JFrame
 					
 					p_result.add(p_jinshan, BorderLayout.CENTER);
 					p_result.validate();
+					p_result.repaint();
 				}
 				else //000
 				{
 					check_state=2; //010
 					p_result.removeAll();
-					jsp2.setPreferredSize(new Dimension(600,480));
+					jsp2.setPreferredSize(new Dimension(600,540));
 					p_result.add(p_youdao, BorderLayout.CENTER);
 					p_result.validate();
+					p_result.repaint();
 				}
 				
 			}
@@ -422,37 +437,41 @@ public class UI extends JFrame
 				
 				if(check_state==7) // 111
 				{
-					check_state = 3; //011
+					check_state = 5; //101
 					p_result.removeAll();
-					jsp2.setPreferredSize(new Dimension(600,240));
+					jsp1.setPreferredSize(new Dimension(600,240));
 					jsp3.setPreferredSize(new Dimension(600,240));
-					p_result.add(p_youdao, BorderLayout.NORTH);
+					p_result.add(p_baidu, BorderLayout.NORTH);
 					p_result.add(p_jinshan, BorderLayout.SOUTH);
 					p_result.validate();
+					p_result.repaint();
 				}
 				else if (check_state==6)// 110
 				{
-					check_state = 2; // 010
+					check_state = 2; // 100
 					p_result.removeAll();
-					jsp2.setPreferredSize(new Dimension(600,480));
-					p_result.add(p_youdao, BorderLayout.CENTER);
+					jsp1.setPreferredSize(new Dimension(600,480));
+					p_result.add(p_baidu, BorderLayout.CENTER);
 					p_result.validate();
+					p_result.repaint();
 				}
-				else if (check_state==5)// 101
+				else if (check_state==3)// 011
 				{
 					check_state = 1; // 001
 					p_result.removeAll();
-					jsp3.setPreferredSize(new Dimension(600,480));
+					jsp3.setPreferredSize(new Dimension(600,540));
 					p_result.add(p_jinshan, BorderLayout.CENTER);
 					p_result.validate();
+					p_result.repaint();
 				}
-				else //100
+				else //010
 				{
 					check_state = 0; // 000
 					p_result.removeAll();
 					JLabel temp = new JLabel("未选中任何词典");
 					p_result.add(temp, BorderLayout.CENTER);
 					p_result.validate();
+					p_result.repaint();
 				}
 				
 				
@@ -460,18 +479,113 @@ public class UI extends JFrame
 				
 			}
 		}
-		else 
+		else if(s==jinshan)
 		{
-			text_area3.setText("");
-			if (jinshan.isSelected())
+			if (jinshan.isSelected()) //变为选中
 			{
-				text_area3.append("selected");
+				/*
+				*110-111
+				*100-101
+				*010-011
+				*000-001
+				*/
+				if (check_state==6)//110
+				{
+					check_state=7;//111
+					p_result.removeAll();
+					jsp1.setPreferredSize(new Dimension(600,140));
+					jsp2.setPreferredSize(new Dimension(600,140));
+					jsp3.setPreferredSize(new Dimension(600,140));
+					p_result.add(p_baidu, BorderLayout.NORTH);
+					p_result.add(p_youdao, BorderLayout.CENTER);
+					p_result.add(p_jinshan, BorderLayout.SOUTH);
+					p_result.validate();
+					p_result.repaint();
+				}
+				else if (check_state==4) //100
+				{
+					check_state=5; //101
+					p_result.removeAll();
+					jsp1.setPreferredSize(new Dimension(600,240));
+					jsp3.setPreferredSize(new Dimension(600,240));
+					
+					p_result.add(p_baidu, BorderLayout.NORTH);
+					p_result.add(p_jinshan, BorderLayout.CENTER);
+					
+					p_result.validate();
+					p_result.repaint();
+				}
+				else if (check_state==2) //010
+				{
+					check_state=3; //011
+					p_result.removeAll();
+					jsp2.setPreferredSize(new Dimension(600,240));
+					jsp3.setPreferredSize(new Dimension(600,240));
+					p_result.add(p_youdao, BorderLayout.NORTH);
+					
+					p_result.add(p_jinshan, BorderLayout.CENTER);
+					p_result.validate();
+					p_result.repaint();
+				}
+				else //000
+				{
+					check_state=1; //001
+					p_result.removeAll();
+					jsp3.setPreferredSize(new Dimension(600,540));
+					p_result.add(p_jinshan, BorderLayout.CENTER);
+					p_result.validate();
+					p_result.repaint();
+				}
+				
 			}
-			else
+			else //变为未选中
 			{
-				text_area3.append("unselected");
+				/*
+				 * 111->110
+				 * 101->100
+				 * 011->010
+				 * 001->000
+				 */
+				if(check_state==7) // 111
+				{
+					check_state = 6; //110
+					p_result.removeAll();
+					jsp1.setPreferredSize(new Dimension(600,240));
+					jsp2.setPreferredSize(new Dimension(600,240));
+					p_result.add(p_baidu, BorderLayout.NORTH);
+					p_result.add(p_youdao, BorderLayout.SOUTH);
+					p_result.validate();
+					p_result.repaint();
+				}
+				else if (check_state==5)// 101
+				{
+					check_state = 4; // 100
+					p_result.removeAll();
+					jsp1.setPreferredSize(new Dimension(600,480));
+					p_result.add(p_baidu, BorderLayout.CENTER);
+					p_result.validate();
+					p_result.repaint();
+				}
+				else if (check_state==3)// 011
+				{
+					check_state = 2; // 010
+					p_result.removeAll();
+					jsp2.setPreferredSize(new Dimension(600,540));
+					p_result.add(p_youdao, BorderLayout.CENTER);
+					p_result.validate();
+					p_result.repaint();
+				}
+				else //001
+				{
+					check_state = 0; // 000
+					p_result.removeAll();
+					JLabel temp = new JLabel("未选中任何词典");
+					p_result.add(temp, BorderLayout.CENTER);
+					p_result.validate();
+					p_result.repaint();
+				}
+				
 			}
-			text_area3.paintImmediately(text_area3.getBounds());
 		}
 		
 		
