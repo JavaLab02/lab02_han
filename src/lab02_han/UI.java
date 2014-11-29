@@ -17,7 +17,7 @@ public class UI extends JFrame
 	protected JButton sign_in = new JButton("µÇÂ¼");
 	protected JButton sign_up = new JButton("×¢²á");
 	
-	protected JTextField input = new JTextField(20);
+	protected JTextField input = new JTextField(25);
 	protected JButton search = new JButton("²éÑ¯");
 	
 	protected JCheckBox baidu;
