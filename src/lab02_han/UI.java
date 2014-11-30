@@ -2,6 +2,7 @@ package lab02_han;
 
 
 
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,34 +15,34 @@ import javax.swing.border.TitledBorder;
 public class UI extends JFrame
 {
 	
-	protected JButton sign_in = new JButton("µÇÂ¼");
-	protected JButton sign_up = new JButton("×¢²á");
+	 JButton sign_in = new JButton("µÇÂ¼");
+	 JButton sign_up = new JButton("×¢²á");
 	
-	protected JTextField input = new JTextField(25);
-	protected JButton search = new JButton("²éÑ¯");
+	 JTextField input = new JTextField(25);
+	 JButton search = new JButton("²éÑ¯");
 	
-	protected JCheckBox baidu;
-	protected JCheckBox youdao;
-	protected JCheckBox jinshan;
-	protected int check_state;
+	 JCheckBox baidu;
+	 JCheckBox youdao;
+	 JCheckBox jinshan;
+	 int check_state;
 	
-	protected Vector<String> user_list = new Vector<String>();
-	protected JList<String> jlist = new JList<String>(user_list);
+	 Vector<String> user_list = new Vector<String>();
+	 JList<String> jlist = new JList<String>(user_list);
 	
-	protected JTextArea text_area1 = new JTextArea();
-	protected JTextArea text_area2 = new JTextArea();
-	protected JTextArea text_area3 = new JTextArea();
+	 JTextArea text_area1 = new JTextArea();
+	 JTextArea text_area2 = new JTextArea();
+	 JTextArea text_area3 = new JTextArea();
 	
-	protected JScrollPane jsp1 = new JScrollPane(text_area1);
-	protected JScrollPane jsp2 = new JScrollPane(text_area2);
-	protected JScrollPane jsp3 = new JScrollPane(text_area3);
+	 JScrollPane jsp1 = new JScrollPane(text_area1);
+	 JScrollPane jsp2 = new JScrollPane(text_area2);
+	 JScrollPane jsp3 = new JScrollPane(text_area3);
 	
-	protected JPanel p_result;
+	 JPanel p_result;
 
 	
-	protected JPanel p_baidu = new JPanel();
-	protected JPanel p_youdao = new JPanel();
-	protected JPanel p_jinshan = new JPanel();
+	 JPanel p_baidu = new JPanel();
+	 JPanel p_youdao = new JPanel();
+	 JPanel p_jinshan = new JPanel();
 	
 	
 	public UI()
@@ -141,59 +142,7 @@ public class UI extends JFrame
 		add(p_north,BorderLayout.NORTH);
 		add(p_south,BorderLayout.SOUTH);
 		
-		sign_in.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				final SignIn signin = new SignIn();
-				signin.setTitle("µÇÂ¼");
-				signin.pack();
-				signin.setLocationRelativeTo(null);
-				signin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				signin.setVisible(true);
-				signin.jbt1.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-					
-					}
-				});
-				signin.jbt2.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						signin.dispose();
-					}
-				});
-			}
-		});
 		
-		sign_up.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				final SignUp signup = new SignUp();
-				signup.setTitle("×¢²á");
-				signup.pack();
-				signup.setLocationRelativeTo(null);
-				signup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				signup.setVisible(true);
-				signup.jbt1.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-					
-					}
-				});
-				signup.jbt2.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						signup.dispose();
-					}
-				});
-			}
-		});
 		
 		baidu.addActionListener(new ActionListener()
 		{
@@ -227,7 +176,7 @@ public class UI extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				MyDialog md = new MyDialog(UI.this,"ÌáÊ¾",true,"·¢ËÍ³É¹¦");
-				md.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 		});
 		send1.zan.addActionListener(new ActionListener()
@@ -645,7 +594,7 @@ public class UI extends JFrame
 		
 	}
 	
-	
+	/*
 	public static void main(String[] args) 
 	{
 		UI frame = new UI();
@@ -656,6 +605,6 @@ public class UI extends JFrame
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
-	
+	*/
 
 }

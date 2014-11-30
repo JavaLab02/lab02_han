@@ -1,5 +1,7 @@
 package lab02_han;
 
+
+
 import java.awt.*;
 import java.io.*;
 import java.net.*;
@@ -79,23 +81,74 @@ public class Server extends JFrame
 		{
 			try
 			{
-				//Create data input and output streams
+				//Create Data input and output streams
+			
 				DataInputStream inputFromClient = new DataInputStream(socket.getInputStream());
 				DataOutputStream outputToClient = new DataOutputStream(socket.getOutputStream());
 				
 				//Continuously serve the client
 				while(true)
 				{
-					//Receive data from the client
-					double radius = inputFromClient.readDouble();
+
+					//Receive Data from the client
+					char head;
+					char ch;
+					String recv = new String("");
+					//¶ÁÈ¡Êý¾ÝÊ××Ö·û
+					head = inputFromClient.readChar();
+					//¶ÁÈ¡Ê£Óà×Ö·û
+					while ( (ch = inputFromClient.readChar()) != '*')
+					{
+						recv += ch;
+					}
 					
-					double area = radius*radius*Math.PI;
+					//µ¥´Ê²éÑ¯
+					if (head=='0')
+					{
+						//prepare data to send to the client
+						String send = "got"+recv;
 							
-					//Send data
-					outputToClient.writeDouble(area);
+						//Send Data
+						outputToClient.writeChars(send+"*");
+						
+						
+						jta.append("Data received from client: " + recv + "\n");
+						jta.append("Server sends: " + send + "\n");
+					}
+					//µÇÂ¼
+					else if(head=='1')
+					{
+						//prepare data to send to the client
+						String send = "got"+recv;
+							
+						//Send Data
+						outputToClient.writeChars(send+"*");
+
+						jta.append("Data received from client: " + recv + "\n");
+						jta.append("Server sends: " + send + "\n");
+					}
+					//×¢²á
+					else if (head=='2')
+					{
+						//prepare data to send to the client
+						String send = "got"+recv;
+							
+						//Send Data
+						outputToClient.writeChars(send+"*");
+
+						jta.append("Data received from client: " + recv + "\n");
+						jta.append("Server sends: " + send + "\n");
+					}
 					
-					jta.append("radius received from client: " + radius + "\n");
-					jta.append("Area found: " + area + "\n");
+					else
+					{
+						
+					}
+						
+					
+					
+					
+					
 				}
 			}
 			catch(IOException ex)
@@ -106,10 +159,10 @@ public class Server extends JFrame
 		 
 	}
 	
-	
-	public static void main(String[] args) 
+	public static void main(String args[])
 	{
-	
+		new Server();
 	}
-
+	
 }
+
