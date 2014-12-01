@@ -76,7 +76,6 @@ public class Client
 				//输入为空
 				if (word==null || word.replace(" ", "").equals(""))
 				{
-					System.out.print("in1");
 					MyDialog md = new MyDialog(ui ,"提示",true,"输入不能为空");
 					md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				}
@@ -85,7 +84,6 @@ public class Client
 					/*
 					 * send word to Server
 					 */
-					System.out.print("in2");
 					word = word.trim();
 					//数据首字符为0，表示查询
 					toServer.writeChars("0");
@@ -100,17 +98,18 @@ public class Client
 					{
 						feedback += ch;
 					}
+					String[] temp = feedback.split("&");
+					temp[0].trim();
+					temp[1].trim();
+					temp[2].trim();
 					
-					//String feedback = new String((String) fromServer.readData());
-					//System.out.println(feedback);
 					//Display to the text area
-					ui.text_area1.append(feedback);
-					ui.text_area2.append(feedback);
-					ui.text_area3.append(feedback);
+					ui.text_area1.append(word+"\n"+temp[0]);
+					ui.text_area2.append(word+"\n"+temp[1]);
+					ui.text_area3.append(word+"\n"+temp[2]);
 				}
 				else
 				{
-					System.out.print("in3");
 					//输入不为英文单词
 					MyDialog md = new MyDialog(ui ,"提示",true,"请输入英文单词");
 					md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -272,7 +271,8 @@ public class Client
 	//检查是否只由字母组成
 	boolean isLetter(String str)
 	{
-		str = str.toLowerCase();
+		//消去空格，转小写
+		str = str.replace(" ", "").toLowerCase();
 		for (int i=0; i<str.length(); i++)
 		{
 			if (str.charAt(i)>='a'&&str.charAt(i)<='z')

@@ -106,8 +106,8 @@ public class Server extends JFrame
 					if (head=='0')
 					{
 						//prepare data to send to the client
-						String send = "got"+recv;
-							
+						String send = GetTranslation.getBaidu(recv)+"&"+GetTranslation.getYoudao(recv)+"&"+GetTranslation.getBing(recv);
+						
 						//Send Data
 						outputToClient.writeChars(send+"*");
 						

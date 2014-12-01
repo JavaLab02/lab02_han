@@ -47,6 +47,11 @@ public class UI extends JFrame
 	
 	public UI()
 	{
+		//设置自动换行
+		text_area1.setLineWrap(true);
+		text_area2.setLineWrap(true);
+		text_area3.setLineWrap(true);
+				
 		JPanel p1 = new JPanel();
 		p1.setLayout(new FlowLayout(FlowLayout.LEFT,5,5));
 		p1.add(new JLabel("Online Dictionary"));
