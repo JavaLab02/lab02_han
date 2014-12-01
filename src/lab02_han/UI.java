@@ -23,7 +23,7 @@ public class UI extends JFrame
 	
 	 JCheckBox baidu;
 	 JCheckBox youdao;
-	 JCheckBox jinshan;
+	 JCheckBox bing;
 	 int check_state;
 	
 	 Vector<String> user_list = new Vector<String>();
@@ -42,7 +42,7 @@ public class UI extends JFrame
 	
 	 JPanel p_baidu = new JPanel();
 	 JPanel p_youdao = new JPanel();
-	 JPanel p_jinshan = new JPanel();
+	 JPanel p_bing = new JPanel();
 	
 	
 	public UI()
@@ -57,19 +57,19 @@ public class UI extends JFrame
 	    baidu.setSelected(true);
 		youdao = new JCheckBox("有道词典");
 	    youdao.setSelected(true);
-		jinshan = new JCheckBox("金山词典");
-	    jinshan.setSelected(true);
+		bing = new JCheckBox("必应词典");
+	    bing.setSelected(true);
 	    check_state = 7; //初始化为7，即二进制111，表示3个全被选中
 	    
 	    JPanel p_check = new JPanel();
 	    p_check.setLayout(new GridLayout(1,0));
 	    p_check.add(baidu);
 	    p_check.add(youdao);
-	    p_check.add(jinshan);
+	    p_check.add(bing);
 	    
 		TitledBorder bd1 = new TitledBorder("百度词典");
 		TitledBorder bd2 = new TitledBorder("有道词典");
-		TitledBorder bd3 = new TitledBorder("金山词典");
+		TitledBorder bd3 = new TitledBorder("必应词典");
 		TitledBorder bd4 = new TitledBorder("单词查询");
 		TitledBorder bd5 = new TitledBorder("在线用户列表");
 		TitledBorder bd6 = new TitledBorder("查询结果");
@@ -96,10 +96,10 @@ public class UI extends JFrame
 		
 		p_baidu.setLayout(new BorderLayout(5,5));
 		p_youdao.setLayout(new BorderLayout(5,5));
-		p_jinshan.setLayout(new BorderLayout(5,5));
+		p_bing.setLayout(new BorderLayout(5,5));
 		p_baidu.setBorder(bd1);
 		p_youdao.setBorder(bd2);
-		p_jinshan.setBorder(bd3);
+		p_bing.setBorder(bd3);
 		
 	
 		
@@ -112,12 +112,12 @@ public class UI extends JFrame
 		p_baidu.add(send1, BorderLayout.SOUTH);
 		p_youdao.add(jsp2, BorderLayout.NORTH);
 		p_youdao.add(send2, BorderLayout.SOUTH);
-		p_jinshan.add(jsp3, BorderLayout.NORTH);
-		p_jinshan.add(send3, BorderLayout.SOUTH);
+		p_bing.add(jsp3, BorderLayout.NORTH);
+		p_bing.add(send3, BorderLayout.SOUTH);
 		
 		p_result.add(p_baidu, BorderLayout.NORTH);
 		p_result.add(p_youdao, BorderLayout.CENTER);
-		p_result.add(p_jinshan, BorderLayout.SOUTH);
+		p_result.add(p_bing, BorderLayout.SOUTH);
 		p_result.setBorder(bd6);
 		
 		jsp1.setPreferredSize(new Dimension(600,140));
@@ -162,7 +162,7 @@ public class UI extends JFrame
 			}
 		});
 	
-		jinshan.addActionListener(new ActionListener()
+		bing.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -274,7 +274,7 @@ public class UI extends JFrame
 					jsp3.setPreferredSize(new Dimension(600,140));
 					p_result.add(p_baidu, BorderLayout.NORTH);
 					p_result.add(p_youdao, BorderLayout.CENTER);
-					p_result.add(p_jinshan, BorderLayout.SOUTH);
+					p_result.add(p_bing, BorderLayout.SOUTH);
 					p_result.validate();
 					p_result.repaint();
 				}
@@ -300,7 +300,7 @@ public class UI extends JFrame
 					jsp3.setPreferredSize(new Dimension(600,244));
 					p_result.add(p_baidu, BorderLayout.NORTH);
 					
-					p_result.add(p_jinshan, BorderLayout.CENTER);
+					p_result.add(p_bing, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}
@@ -325,7 +325,7 @@ public class UI extends JFrame
 					jsp2.setPreferredSize(new Dimension(600,244));
 					jsp3.setPreferredSize(new Dimension(600,244));
 					p_result.add(p_youdao, BorderLayout.NORTH);
-					p_result.add(p_jinshan, BorderLayout.SOUTH);
+					p_result.add(p_bing, BorderLayout.SOUTH);
 					p_result.validate();
 					p_result.repaint();
 				}
@@ -343,7 +343,7 @@ public class UI extends JFrame
 					check_state = 1; // 001
 					p_result.removeAll();
 					jsp3.setPreferredSize(new Dimension(600,560));
-					p_result.add(p_jinshan, BorderLayout.CENTER);
+					p_result.add(p_bing, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}
@@ -394,7 +394,7 @@ public class UI extends JFrame
 					jsp3.setPreferredSize(new Dimension(600,140));
 					p_result.add(p_baidu, BorderLayout.NORTH);
 					p_result.add(p_youdao, BorderLayout.CENTER);
-					p_result.add(p_jinshan, BorderLayout.SOUTH);
+					p_result.add(p_bing, BorderLayout.SOUTH);
 					p_result.validate();
 					p_result.repaint();
 				}
@@ -420,7 +420,7 @@ public class UI extends JFrame
 					jsp3.setPreferredSize(new Dimension(600,244));
 					p_result.add(p_youdao, BorderLayout.NORTH);
 					
-					p_result.add(p_jinshan, BorderLayout.CENTER);
+					p_result.add(p_bing, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}
@@ -445,7 +445,7 @@ public class UI extends JFrame
 					jsp1.setPreferredSize(new Dimension(600,244));
 					jsp3.setPreferredSize(new Dimension(600,244));
 					p_result.add(p_baidu, BorderLayout.NORTH);
-					p_result.add(p_jinshan, BorderLayout.SOUTH);
+					p_result.add(p_bing, BorderLayout.SOUTH);
 					p_result.validate();
 					p_result.repaint();
 				}
@@ -463,7 +463,7 @@ public class UI extends JFrame
 					check_state = 1; // 001
 					p_result.removeAll();
 					jsp3.setPreferredSize(new Dimension(600,560));
-					p_result.add(p_jinshan, BorderLayout.CENTER);
+					p_result.add(p_bing, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}
@@ -482,9 +482,9 @@ public class UI extends JFrame
 				
 			}
 		}
-		else if(s==jinshan)
+		else if(s==bing)
 		{
-			if (jinshan.isSelected()) //变为选中
+			if (bing.isSelected()) //变为选中
 			{
 				/*
 				*110-111
@@ -501,7 +501,7 @@ public class UI extends JFrame
 					jsp3.setPreferredSize(new Dimension(600,140));
 					p_result.add(p_baidu, BorderLayout.NORTH);
 					p_result.add(p_youdao, BorderLayout.CENTER);
-					p_result.add(p_jinshan, BorderLayout.SOUTH);
+					p_result.add(p_bing, BorderLayout.SOUTH);
 					p_result.validate();
 					p_result.repaint();
 				}
@@ -513,7 +513,7 @@ public class UI extends JFrame
 					jsp3.setPreferredSize(new Dimension(600,244));
 					
 					p_result.add(p_baidu, BorderLayout.NORTH);
-					p_result.add(p_jinshan, BorderLayout.CENTER);
+					p_result.add(p_bing, BorderLayout.CENTER);
 					
 					p_result.validate();
 					p_result.repaint();
@@ -526,7 +526,7 @@ public class UI extends JFrame
 					jsp3.setPreferredSize(new Dimension(600,244));
 					p_result.add(p_youdao, BorderLayout.NORTH);
 					
-					p_result.add(p_jinshan, BorderLayout.CENTER);
+					p_result.add(p_bing, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}
@@ -535,7 +535,7 @@ public class UI extends JFrame
 					check_state=1; //001
 					p_result.removeAll();
 					jsp3.setPreferredSize(new Dimension(600,560));
-					p_result.add(p_jinshan, BorderLayout.CENTER);
+					p_result.add(p_bing, BorderLayout.CENTER);
 					p_result.validate();
 					p_result.repaint();
 				}

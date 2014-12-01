@@ -22,7 +22,7 @@ public class MyDialog extends JDialog
 		JPanel p1 = new JPanel();
 		JPanel p2 = new JPanel();
 		JLabel jlb = new JLabel(contains);
-		jlb.setFont(new   Font("字体",   1,   13)); 
+		jlb.setFont(new   Font("字体",   1,   15)); 
 		JButton ok = new JButton("确定");
 		p1.add(jlb);
 		p2.add(ok);

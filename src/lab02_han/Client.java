@@ -72,11 +72,21 @@ public class Client
 		
 				//get word 
 				String word = ui.input.getText();
-				word = word.trim();
 				
-				//send word to Server
-				if (word!=null && !(word.replace(" ", "").equals("")))
-				{	
+				//输入为空
+				if (word==null || word.replace(" ", "").equals(""))
+				{
+					System.out.print("in1");
+					MyDialog md = new MyDialog(ui ,"提示",true,"输入不能为空");
+					md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				}
+				else if (isLetter(word))
+				{
+					/*
+					 * send word to Server
+					 */
+					System.out.print("in2");
+					word = word.trim();
 					//数据首字符为0，表示查询
 					toServer.writeChars("0");
 					//末尾加*，表示结束符
@@ -91,16 +101,21 @@ public class Client
 						feedback += ch;
 					}
 					
-					
 					//String feedback = new String((String) fromServer.readData());
-					
 					//System.out.println(feedback);
 					//Display to the text area
 					ui.text_area1.append(feedback);
 					ui.text_area2.append(feedback);
 					ui.text_area3.append(feedback);
 				}
-				
+				else
+				{
+					System.out.print("in3");
+					//输入不为英文单词
+					MyDialog md = new MyDialog(ui ,"提示",true,"请输入英文单词");
+					md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					
+				}		
 			}
 			catch(IOException  ex)
 			{
@@ -243,6 +258,24 @@ public class Client
 		for (int i=0; i<str.length(); i++)
 		{
 			if ( (str.charAt(i)>='a'&&str.charAt(i)<='z') || (str.charAt(i)>='0'&&str.charAt(i)<='9'))
+			{
+				continue;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	//检查是否只由字母组成
+	boolean isLetter(String str)
+	{
+		str = str.toLowerCase();
+		for (int i=0; i<str.length(); i++)
+		{
+			if (str.charAt(i)>='a'&&str.charAt(i)<='z')
 			{
 				continue;
 			}
