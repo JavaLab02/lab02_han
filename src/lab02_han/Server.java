@@ -119,7 +119,10 @@ public class Server extends JFrame
 					else if(head=='1')
 					{
 						//prepare data to send to the client
-						String send = "got"+recv;
+						String[] temp = recv.split("&");
+						String account = temp[0];
+						String password = temp[1];
+						String send = "SignIn \n accont: "+account+"\n password: "+password;
 							
 						//Send Data
 						outputToClient.writeChars(send+"*");
@@ -131,7 +134,10 @@ public class Server extends JFrame
 					else if (head=='2')
 					{
 						//prepare data to send to the client
-						String send = "got"+recv;
+						String[] temp = recv.split("&");
+						String account = temp[0];
+						String password = temp[1];
+						String send = "SignUp \n accont: "+account+"\n password: "+password;
 							
 						//Send Data
 						outputToClient.writeChars(send+"*");

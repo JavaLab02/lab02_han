@@ -16,6 +16,7 @@ public class Client
 	private DataInputStream fromServer;
 	private DataOutputStream toServer;
 	
+	//construction method
 	public Client()
 	{
 		ui = new UI();
@@ -130,10 +131,18 @@ public class Client
 						String account = signin.account.getText();
 						String password = signin.password.getText();
 						
-						if (isValid(account)&&isValid(password))
+						//判断是否为空
+						if (account==null || account.replace(" ", "").equals("") || password==null || password.replace(" ", "").equals("") )
 						{
-							//数据受字符为2，表示注册
-							toServer.writeChars("2");
+							MyDialog md = new MyDialog(signin,"提示",true,"用户名和密码不能为空");
+							md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						}
+							
+						
+						else if (isValid(account)&&isValid(password))
+						{
+							//数据受字符为1，表示登录
+							toServer.writeChars("1");
 							//&作为连接符
 							toServer.writeChars(account+"&");
 							//*作为结束符
@@ -226,10 +235,10 @@ public class Client
 	 */
 	boolean isValid(String str)
 	{
-		
+		/*
 		if (str==null || str.replace(" ", "").equals(""))
 			return false;
-		
+		*/
 		str = str.toLowerCase();
 		for (int i=0; i<str.length(); i++)
 		{
