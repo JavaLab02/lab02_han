@@ -28,9 +28,9 @@ import org.jsoup.select.Elements;
 
 public class TranslateOnline {
 	private CloseableHttpClient client;
-	private BasicCookieStore cookieStore = null;// ´æ´¢cookieÓÃ
+	private BasicCookieStore cookieStore = null;// å­˜å‚¨cookieç”¨
 	public TranslateOnline(){
-		//PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();//¶àÏß³Ì
+		//PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();//å¤šçº¿ç¨‹
 	    //cm.setMaxTotal(5);
 		cookieStore = new BasicCookieStore();
 		client = HttpClients.custom().setDefaultCookieStore(cookieStore)
@@ -44,7 +44,7 @@ public class TranslateOnline {
 		this.cookieStore = cookieStore;
 	}
 	/**
-	 * ´Órespose ÖĞ»ñÈ¡ÏìÓ¦ÎÄ±¾ĞÅÏ¢
+	 * ä»respose ä¸­è·å–å“åº”æ–‡æœ¬ä¿¡æ¯
 	 * 
 	 * @param response
 	 * @return
@@ -52,7 +52,7 @@ public class TranslateOnline {
 	 */
 	public String getContentGBK(CloseableHttpResponse response) throws IOException {
 		HttpEntity entity=null;
-		//»ñÈ¡ÏìÓ¦×´Ì¬ÂëºÍÏìÓ¦ÄÚÈİ
+		//è·å–å“åº”çŠ¶æ€ç å’Œå“åº”å†…å®¹
 		if(response.getStatusLine().getStatusCode()>=200&&response.getStatusLine().getStatusCode()<300)
 		  entity = response.getEntity();
 		String content = null;
@@ -70,14 +70,14 @@ public class TranslateOnline {
 				entity.getContent().close();
 			}
 			response.close();
-			entity=null;//·ÀÖ¹ÄÚ´æĞ¹Â¶
+			entity=null;//é˜²æ­¢å†…å­˜æ³„éœ²
 			response=null;
 		}
 		return content;
 	}
 
 	/**
-	 * ´Órespose ÖĞ»ñÈ¡ÏìÓ¦ÎÄ±¾ĞÅÏ¢
+	 * ä»respose ä¸­è·å–å“åº”æ–‡æœ¬ä¿¡æ¯
 	 * 
 	 * @param response
 	 * @return
@@ -103,7 +103,7 @@ public class TranslateOnline {
 					entity.getContent().close();
 				}
 				response.close();
-				entity=null;//·ÀÖ¹ÄÚ´æĞ¹Â¶
+				entity=null;//é˜²æ­¢å†…å­˜æ³„éœ²
 				response=null;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -114,7 +114,7 @@ public class TranslateOnline {
 	
 	public CloseableHttpResponse getRequest(CloseableHttpClient client, String url)throws ClientProtocolException, IOException {
 	
-		//Http request URIS°üº¬Ğ­ÒéÃû¡¢Ö÷»úÃû¡¢Ö÷»ú¶Ë¿Ú£¨¿ÉÑ¡£©¡¢×ÊÔ´Â·¾¶¡¢query£¨¿ÉÑ¡£©ºÍÆ¬¶ÎĞÅÏ¢£¨¿ÉÑ¡£©
+		//Http request URISåŒ…å«åè®®åã€ä¸»æœºåã€ä¸»æœºç«¯å£ï¼ˆå¯é€‰ï¼‰ã€èµ„æºè·¯å¾„ã€queryï¼ˆå¯é€‰ï¼‰å’Œç‰‡æ®µä¿¡æ¯ï¼ˆå¯é€‰ï¼‰
 		RequestConfig requestConfig = RequestConfig.custom()
 		        .setSocketTimeout(600000)
 		        .setConnectTimeout(600000)
@@ -139,12 +139,12 @@ public class TranslateOnline {
 		try{
 			content = getContentGBK(getRequest(client, url.trim()));
 			Document doc = Jsoup.parse(content);
-			//µ¥´ÊÊÍÒå²¿·Ö
+			//å•è¯é‡Šä¹‰éƒ¨åˆ†
 			if(doc!=null){
 				Element element = null;
 				if(doc.getElementsByAttributeValue("class", "qdef") != null)
 					element = doc.getElementsByAttributeValue("class", "qdef").first();
-					//µ¥´ÊµÄ´ÊĞÔ
+					//å•è¯çš„è¯æ€§
 				if(element != null){
 					Elements classOfWord = element.getElementsByTag("li");;
 					if(classOfWord != null){
@@ -153,8 +153,8 @@ public class TranslateOnline {
 							noteOfWord = noteOfWord +((Element)iter.next()).text() + "\n";
 						}
 					}
-					//ÒÔÉÏÊÇµ¥´ÊÊÍÒå²¿·Ö
-					//µ¥´ÊµÄÀı¾ä²¿·Ö
+					//ä»¥ä¸Šæ˜¯å•è¯é‡Šä¹‰éƒ¨åˆ†
+					//å•è¯çš„ä¾‹å¥éƒ¨åˆ†
 					Element exampleElement = null;
 					if(doc.getElementsByAttributeValue("class", "de_seg")!=null)
 						exampleElement = doc.getElementsByAttributeValue("class", "de_seg").first();
@@ -170,15 +170,15 @@ public class TranslateOnline {
 							sentenceChinese = sentenceElement.getElementsByAttributeValue("class", "bil_ex").first().text();
 					}
 					if(sentenceEnglish.length() > 0||sentenceChinese.length() > 0)
-						noteOfWord = noteOfWord + "\n"+ "È¨ÍşÓ¢ººË«½âÀı¾ä\n"+sentenceEnglish + "\n" + sentenceChinese;
-					System.out.println(noteOfWord);
+						noteOfWord = noteOfWord + "\n"+ "æƒå¨è‹±æ±‰åŒè§£ä¾‹å¥\n"+sentenceEnglish + "\n" + sentenceChinese;
+					//System.out.println(noteOfWord);
 				}else{
-					noteOfWord = "´ÊµäÖĞÃ»ÓĞÓëÄúËÑË÷µÄ¹Ø¼ü´ÊÆ¥ÅäµÄÄÚÈİ";
-					System.out.println(noteOfWord);
+					noteOfWord = "æ— é‡Šä¹‰";
+					//System.out.println(noteOfWord);
 				}
 				
 			}else{
-				noteOfWord = "´ÊµäÖĞÃ»ÓĞÓëÄúËÑË÷µÄ¹Ø¼ü´ÊÆ¥ÅäµÄÄÚÈİ";
+				noteOfWord = "è¯å…¸ä¸­æ²¡æœ‰ä¸æ‚¨æœç´¢çš„å…³é”®è¯åŒ¹é…çš„å†…å®¹";
 				//System.out.println(noteOfWord);
 			}
 		}catch (ParseException e) {
@@ -197,10 +197,10 @@ public class TranslateOnline {
 		try{
 			content = getContentGBK(getRequest(client, url.trim()));
 			Document doc = Jsoup.parse(content);
-			//µ¥´Ê²¿·Ö
+			//å•è¯éƒ¨åˆ†
 			if(doc != null){
 				Element element = doc.getElementsByAttributeValue("class", "tab en-simple-means dict-en-simplemeans-english").first();
-					//µ¥´ÊµÄ´ÊĞÔ
+					//å•è¯çš„è¯æ€§
 				if(element != null){
 					Elements classOfWord = element.getElementsByTag("p");
 					if(classOfWord != null){
@@ -209,8 +209,8 @@ public class TranslateOnline {
 							noteOfWord = noteOfWord +((Element)iter.next()).text() + "\n";
 						}
 					}
-					//ÒÔÉÏÊÇµ¥´Ê²¿·Ö
-					//Àı¾ä²¿·Ö
+					//ä»¥ä¸Šæ˜¯å•è¯éƒ¨åˆ†
+					//ä¾‹å¥éƒ¨åˆ†
 					Element exampleElement = null;
 					if(doc.getElementsByAttributeValue("class", "tab en-collins dict-en-collins-english") != null)
 						exampleElement = doc.getElementsByAttributeValue("class", "tab en-collins dict-en-collins-english").first();
@@ -228,16 +228,16 @@ public class TranslateOnline {
 						}
 					}
 					if(sentenceEnglish.length() > 0||sentenceChinese.length() > 0)
-						noteOfWord = noteOfWord + "\n"+ "¿ÂÁÖË¹¸ß½×Ó¢ºº´Êµä/Àı¾ä\n"+sentenceEnglish + "\n" + sentenceChinese;
-					System.out.println(noteOfWord);
+						noteOfWord = noteOfWord + "\n"+ "æŸ¯æ—æ–¯é«˜é˜¶è‹±æ±‰è¯å…¸/ä¾‹å¥\n"+sentenceEnglish + "\n" + sentenceChinese;
+					//System.out.println(noteOfWord);
 				}
 				else{
-					noteOfWord = "´ÊµäÖĞÃ»ÓĞÓëÄúËÑË÷µÄ¹Ø¼ü´ÊÆ¥ÅäµÄÄÚÈİ";
-					System.out.println(noteOfWord);
+					noteOfWord = "æ— é‡Šä¹‰";
+					//System.out.println(noteOfWord);
 				}
 			}
 			else{
-				noteOfWord = "´ÊµäÖĞÃ»ÓĞÓëÄúËÑË÷µÄ¹Ø¼ü´ÊÆ¥ÅäµÄÄÚÈİ";
+				noteOfWord = "è¯å…¸ä¸­æ²¡æœ‰ä¸æ‚¨æœç´¢çš„å…³é”®è¯åŒ¹é…çš„å†…å®¹";
 				//System.out.println(noteOfWord);
 			}
 		}catch (ParseException e) {
@@ -255,12 +255,12 @@ public class TranslateOnline {
 			content = getContentGBK(getRequest(client, url.trim()));
 			Document doc = Jsoup.parse(content);
 			if(doc != null){
-				//µ¥´Ê²¿·Ö
+				//å•è¯éƒ¨åˆ†
 				Element element = null;
 				if(doc.getElementsByAttributeValue("class", "trans-container") != null)
 					element = doc.getElementsByAttributeValue("class", "trans-container").first();
 				if(element!=null){
-					//µ¥´ÊµÄ´ÊĞÔ
+					//å•è¯çš„è¯æ€§
 					Elements classOfWord = element.getElementsByTag("li");
 					if(classOfWord != null){
 						Iterator iter = classOfWord.iterator();
@@ -276,9 +276,9 @@ public class TranslateOnline {
 					}
 //					/System.out.println(noteOfWord);
 				}else{
-					noteOfWord = "ÎŞÊÍÒå";
+					noteOfWord = "æ— é‡Šä¹‰";
 				}
-				//Àı¾ä²¿·Ö
+				//ä¾‹å¥éƒ¨åˆ†
 				Element additionalSentenceEnglish = null;
 				Element additionalSentenceChinese = null;
 				if(doc.getElementsByAttributeValue("class", "additional")!=null){
@@ -288,9 +288,9 @@ public class TranslateOnline {
 						noteOfWord = "\n" + noteOfWord + "\n" +additionalSentenceEnglish.text() + "\n" +additionalSentenceChinese.text();
 					}
 				}
-				System.out.println(noteOfWord);
+				//System.out.println(noteOfWord);
 			}else{
-				noteOfWord = "´ÊµäÖĞÃ»ÓĞÓëÄúËÑË÷µÄ¹Ø¼ü´ÊÆ¥ÅäµÄÄÚÈİ";
+				noteOfWord = "è¯å…¸ä¸­æ²¡æœ‰ä¸æ‚¨æœç´¢çš„å…³é”®è¯åŒ¹é…çš„å†…å®¹";
 				//System.out.println(noteOfWord);
 			}
 		}catch (ParseException e) {

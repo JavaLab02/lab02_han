@@ -19,6 +19,7 @@ public class Server extends JFrame
 	{
 		//Place text area on the frame
 		setLayout(new BorderLayout());
+		jta.setLineWrap(true);
 		add(new JScrollPane(jta), BorderLayout.CENTER);
 		
 		setTitle("Server");
