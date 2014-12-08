@@ -12,8 +12,7 @@ public class Client
 {
 	//Interface
 	private UI ui;
-	//IO stream
-	private DataInputStream fromServer;
+	//output stream
 	private DataOutputStream toServer;
 	
 	//construction method
@@ -30,14 +29,15 @@ public class Client
 		{
 			//Create a socket to connect to the server
 			Socket socket = new Socket("localhost", 8000);
-			/*
-			if (!socket.isConnected())
-			{
-				System.out.println("未连接上服务器");
-			}
-			*/
+			
+			Receive receive = new Receive(socket);
+			
+			Thread receiveThread = new Thread(receive);
+			receiveThread.start();
+			
+			
 			//Create an input stream to receive data from server
-			fromServer = new DataInputStream(socket.getInputStream());
+			//fromServer = new DataInputStream(socket.getInputStream());
 			toServer = new DataOutputStream(socket.getOutputStream());
 		}
 		catch(IOException ex)
@@ -69,7 +69,8 @@ public class Client
 		{
 			try
 			{
-		
+				
+				
 				//get word 
 				String word = ui.input.getText();
 				
@@ -91,22 +92,6 @@ public class Client
 					toServer.writeChars(word+"*");
 					toServer.flush();
 					
-					//get data from Server
-					char ch;
-					String feedback = new String("");
-					while ( (ch = fromServer.readChar()) != '*')
-					{
-						feedback += ch;
-					}
-					String[] temp = feedback.split("&");
-					temp[0].trim();
-					temp[1].trim();
-					temp[2].trim();
-					
-					//Display to the text area
-					ui.text_area1.append(word+"\n"+temp[0]);
-					ui.text_area2.append(word+"\n"+temp[1]);
-					ui.text_area3.append(word+"\n"+temp[2]);
 				}
 				else
 				{
@@ -286,6 +271,89 @@ public class Client
 		}
 		return true;
 	}
+	//Inner class
+	//Define the thread class for receiving message from Server
+	//and handle the message
+	class Receive implements Runnable
+	{
+		private Socket socket; //A connection socket
+				
+				
+		// Construct a thread
+		public Receive(Socket socket)
+		{
+			this.socket = socket;
+		}
+		
+		public void test(String str)
+		{
+			
+		}
+		
+		//run a thread
+		public void run()
+		{
+			try
+			{
+				//Create Data input 
+				DataInputStream inputFromServer = new DataInputStream(socket.getInputStream());
+				
+				
+				//Continuously serve the client
+				while(true)
+				{
+
+					//Receive Data from the Server
+					char head;
+					char ch;
+					String recv = new String("");
+					//读取数据首字符
+					head = inputFromServer.readChar();
+					//读取剩余字符
+					while ( (ch = inputFromServer.readChar()) != '*')
+					{
+						recv += ch;
+					}
+					
+					//System.out.println(recv);
+					
+					if (head == '0')
+					{
+
+						String[] temp = recv.split("&");
+						temp[0].trim();
+						temp[1].trim();
+						temp[2].trim();
+						
+						//Display to the text area
+						ui.text_area1.append(temp[0]);
+						ui.text_area2.append(temp[1]);
+						ui.text_area3.append(temp[2]);
+					}
+					else if (head=='1')
+					{
+						
+					}
+					else if (head=='2')
+					{
+						
+					}
+					else
+					{
+						
+					}
+					
+				}
+			}
+			catch(IOException ex)
+			{
+				System.err.println(ex);
+			}
+		}
+		 
+	}
+	
+	
 	
 	public static void main(String[] args)
 	{

@@ -83,7 +83,6 @@ public class Server extends JFrame
 			try
 			{
 				//Create Data input and output streams
-			
 				DataInputStream inputFromClient = new DataInputStream(socket.getInputStream());
 				DataOutputStream outputToClient = new DataOutputStream(socket.getOutputStream());
 				
@@ -107,7 +106,7 @@ public class Server extends JFrame
 					if (head=='0')
 					{
 						//prepare data to send to the client
-						String send = GetTranslation.getBaidu(recv)+"&"+GetTranslation.getYoudao(recv)+"&"+GetTranslation.getBing(recv);
+						String send = "0"+GetTranslation.getBaidu(recv)+"&"+GetTranslation.getYoudao(recv)+"&"+GetTranslation.getBing(recv);
 						
 						//Send Data
 						outputToClient.writeChars(send+"*");
@@ -123,7 +122,7 @@ public class Server extends JFrame
 						String[] temp = recv.split("&");
 						String account = temp[0];
 						String password = temp[1];
-						String send = "SignIn \n accont: "+account+"\n password: "+password;
+						String send = "1"+"SignIn \n accont: "+account+"\n password: "+password;
 							
 						//Send Data
 						outputToClient.writeChars(send+"*");
@@ -138,7 +137,7 @@ public class Server extends JFrame
 						String[] temp = recv.split("&");
 						String account = temp[0];
 						String password = temp[1];
-						String send = "SignUp \n accont: "+account+"\n password: "+password;
+						String send = "2"+"SignUp \n accont: "+account+"\n password: "+password;
 							
 						//Send Data
 						outputToClient.writeChars(send+"*");
