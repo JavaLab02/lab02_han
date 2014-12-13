@@ -5,15 +5,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
+import java.util.Vector;
 
 import javax.swing.*;
 
-public class Client 
+public class Client implements Runnable
 {
 	//Interface
 	private UI ui;
-	//output stream
+	//IO stream
 	private DataOutputStream toServer;
+	private DataInputStream fromServer;
+	
+	private Vector<String> onlineUserList;
 	
 	//construction method
 	public Client()
@@ -24,27 +28,8 @@ public class Client
 		ui.setLocationRelativeTo(null);
 		ui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ui.setVisible(true);
+		onlineUserList = new Vector<String>();
 		
-		try
-		{
-			//Create a socket to connect to the server
-			Socket socket = new Socket("localhost", 8000);
-			
-			Receive receive = new Receive(socket);
-			
-			Thread receiveThread = new Thread(receive);
-			receiveThread.start();
-			
-			
-			//Create an input stream to receive data from server
-			//fromServer = new DataInputStream(socket.getInputStream());
-			toServer = new DataOutputStream(socket.getOutputStream());
-		}
-		catch(IOException ex)
-		{
-			System.err.println(ex+" 未连接上服务器");
-			
-		}
 		
 		/*
 		 * 设置UI中需要传递数据的按键监听类
@@ -58,10 +43,125 @@ public class Client
 		//SignUp button listener 注册按钮
 		ui.sign_up.addActionListener(new SignUpListener());
 		
+		ConnectionToServer();
+		Thread thread = new Thread(this);
+		thread.start();
+		
 	}
 	
+	//建立与服务器的IO连接
+	private void ConnectionToServer()
+	{
+		try
+		{
+			//Create a socket to connect to the server
+			Socket socket = new Socket("localhost", 8000);
+			
+			//Create an input stream to receive data from server
+			fromServer = new DataInputStream(socket.getInputStream());
+			//Create an output stream to send data to server
+			toServer = new DataOutputStream(socket.getOutputStream());
+		}
+		catch(IOException ex)
+		{
+			System.err.println(ex+" 未连接上服务器");
+			
+		}
+	}
 	
+	public void run()
+	{
+		try
+		{
+			//Continuously receive message from server
+			while(true)
+			{
+
+				//Receive Data from the Server
+				char head;
+				char ch;
+				String recv = new String("");
+				//读取数据首字符
+				head = fromServer.readChar();
+				//读取剩余字符
+				while ( (ch = fromServer.readChar()) != '*')
+				{
+					recv += ch;
+				}
+				
+				//单词查询
+				if (head == '0')
+				{
+					handleSearchFeedback(recv);
+				
+				}
+				//登录
+				else if (head=='1')
+				{
+					handleSignInFeedback(recv);
+				}
+				//注册
+				else if (head=='2')
+				{
+					
+				}
+				else
+				{
+					
+				}
+				
+			}
+		}
+		catch(IOException ex)
+		{
+			System.err.println(ex);
+		}
+	}
 	
+	//处理来自服务器的查询反馈
+	private void handleSearchFeedback(String recv)
+	{
+		String[] temp = recv.split("&");
+		temp[0].trim();
+		temp[1].trim();
+		temp[2].trim();
+		ui.text_area1.setText("");
+		ui.text_area2.setText("");
+		ui.text_area3.setText("");
+		
+		//Display to the text area
+		ui.text_area1.append(temp[0]);
+		ui.text_area2.append(temp[1]);
+		ui.text_area3.append(temp[2]);
+	}
+	
+	//处理登录反馈
+	//recv格式:  "0/1&name1,name2,name3"
+	private void handleSignInFeedback(String recv)
+	{
+		String[] temp = recv.split("&");
+		System.out.println(recv);
+		if (temp[0].equals("0"))//登录失败
+		{
+			
+		}
+		else if(temp[0].equals("1"))//成功
+		{
+			String[] names = temp[1].split(",");
+			for (int i=0; i<names.length; i++)
+			{
+				this.onlineUserList.add(names[i]);
+				System.out.println(names[i]);
+			}
+			ui.updateUserList(onlineUserList);
+		}
+	}
+	
+	//处理注册反馈
+	private void handleSignUpFeedback(String recv)
+	{
+		
+	}
 	//handle search button action
 	private class SearchListener implements ActionListener
 	{
@@ -109,7 +209,7 @@ public class Client
 		}
 	}
 	
-	//handle SignIn action
+	//handle SignIn action 登录
 	private class SignInListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
@@ -134,6 +234,12 @@ public class Client
 						if (account==null || account.replace(" ", "").equals("") || password==null || password.replace(" ", "").equals("") )
 						{
 							MyDialog md = new MyDialog(signin,"提示",true,"用户名和密码不能为空");
+							md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						}
+						//判断长度
+						else if(account.length()>=20 || password.length()>=20)
+						{
+							MyDialog md = new MyDialog(signin,"提示",true,"用户名和密码不能超过20字节");
 							md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 						}
 							
@@ -172,7 +278,7 @@ public class Client
 	}
 	
 	
-	//handle SignUp action
+	//handle SignUp action 注册
 	private class SignUpListener implements ActionListener
 	{	
 		public void actionPerformed(ActionEvent e)
@@ -193,7 +299,20 @@ public class Client
 						String account = signup.account.getText();
 						String password = signup.password.getText();
 						
-						if (isValid(account)&&isValid(password))
+						//判断是否为空
+						if (account==null || account.replace(" ", "").equals("") || password==null || password.replace(" ", "").equals("") )
+						{
+							MyDialog md = new MyDialog(signup,"提示",true,"用户名和密码不能为空");
+							md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						}
+						//判断长度
+						else if(account.length()>=20 || password.length()>=20)
+						{
+							MyDialog md = new MyDialog(signup,"提示",true,"用户名和密码不能超过20字节");
+							md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						}
+						
+						else if (isValid(account)&&isValid(password))
 						{
 							//数据受字符为2，表示注册
 							toServer.writeChars("2");
@@ -271,87 +390,9 @@ public class Client
 		}
 		return true;
 	}
-	//Inner class
-	//Define the thread class for receiving message from Server
-	//and handle the message
-	class Receive implements Runnable
-	{
-		private Socket socket; //A connection socket
-				
-				
-		// Construct a thread
-		public Receive(Socket socket)
-		{
-			this.socket = socket;
-		}
+	
 		
-		public void test(String str)
-		{
-			
-		}
-		
-		//run a thread
-		public void run()
-		{
-			try
-			{
-				//Create Data input 
-				DataInputStream inputFromServer = new DataInputStream(socket.getInputStream());
-				
-				
-				//Continuously serve the client
-				while(true)
-				{
 
-					//Receive Data from the Server
-					char head;
-					char ch;
-					String recv = new String("");
-					//读取数据首字符
-					head = inputFromServer.readChar();
-					//读取剩余字符
-					while ( (ch = inputFromServer.readChar()) != '*')
-					{
-						recv += ch;
-					}
-					
-					//System.out.println(recv);
-					
-					if (head == '0')
-					{
-
-						String[] temp = recv.split("&");
-						temp[0].trim();
-						temp[1].trim();
-						temp[2].trim();
-						
-						//Display to the text area
-						ui.text_area1.append(temp[0]);
-						ui.text_area2.append(temp[1]);
-						ui.text_area3.append(temp[2]);
-					}
-					else if (head=='1')
-					{
-						
-					}
-					else if (head=='2')
-					{
-						
-					}
-					else
-					{
-						
-					}
-					
-				}
-			}
-			catch(IOException ex)
-			{
-				System.err.println(ex);
-			}
-		}
-		 
-	}
 	
 	
 	

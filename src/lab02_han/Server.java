@@ -13,10 +13,17 @@ import javax.swing.*;
 public class Server extends JFrame
 {
 	
-	private JTextArea jta = new JTextArea();
+	JTextArea jta = new JTextArea();
+	static ArrayList<HandleAClient> clients;
+	static ArrayList<HandleAClient> onlineClients;
+	static Vector<String> onlineUser;
+	
 	
 	public Server()
 	{
+		clients = new ArrayList<HandleAClient>();
+		onlineClients = new ArrayList<HandleAClient>();
+		onlineUser = new Vector<String>();
 		//Place text area on the frame
 		setLayout(new BorderLayout());
 		jta.setLineWrap(true);
@@ -51,6 +58,9 @@ public class Server extends JFrame
 				//create a new thread for the connection
 				HandleAClient task = new HandleAClient(socket);
 				
+				//加入客户端链表
+				clients.add(task);
+				
 				//start a new thread
 				new Thread(task).start();
 				
@@ -69,13 +79,22 @@ public class Server extends JFrame
 	//Define the thread class for handling new connection
 	class HandleAClient implements Runnable
 	{
-		private Socket socket; //A connection socket
-				
-				
+		//A connection socket
+		Socket socket; 
+		//user's name
+		String name;
+		
+		boolean isOnline;
+		
+		DataInputStream inputFromClient;
+		DataOutputStream outputToClient;	
+		
 		// Construct a thread
 		public HandleAClient(Socket socket)
 		{
 			this.socket = socket;
+			name = "";
+			isOnline = false;
 		}
 		//run a thread
 		public void run()
@@ -83,13 +102,17 @@ public class Server extends JFrame
 			try
 			{
 				//Create Data input and output streams
-				DataInputStream inputFromClient = new DataInputStream(socket.getInputStream());
-				DataOutputStream outputToClient = new DataOutputStream(socket.getOutputStream());
+				inputFromClient = new DataInputStream(socket.getInputStream());
+				outputToClient = new DataOutputStream(socket.getOutputStream());
 				
 				//Continuously serve the client
 				while(true)
 				{
-
+					if (!socket.isConnected())
+					{
+						System.out.print("connected");
+					}
+					
 					//Receive Data from the client
 					char head;
 					char ch;
@@ -105,12 +128,16 @@ public class Server extends JFrame
 					//单词查询
 					if (head=='0')
 					{
+						/*
 						//prepare data to send to the client
 						String send = "0"+GetTranslation.getBaidu(recv)+"&"+GetTranslation.getYoudao(recv)+"&"+GetTranslation.getBing(recv);
 						
 						//Send Data
 						outputToClient.writeChars(send+"*");
+						*/
 						
+						String send = "11&Tom,Bob,Lancy*";
+						Server.this.sendToAll(send);
 						
 						jta.append("Data received from client: " + recv + "\n");
 						jta.append("Server sends: " + send + "\n");
@@ -122,13 +149,48 @@ public class Server extends JFrame
 						String[] temp = recv.split("&");
 						String account = temp[0];
 						String password = temp[1];
-						String send = "1"+"SignIn \n accont: "+account+"\n password: "+password;
-							
-						//Send Data
-						outputToClient.writeChars(send+"*");
-
-						jta.append("Data received from client: " + recv + "\n");
-						jta.append("Server sends: " + send + "\n");
+						
+						try 
+						{
+							if (DataBaseHandler.isAuthorized(account, password))
+							{
+								onlineClients.add(this);
+								onlineUser.add(account);
+								this.isOnline = true;
+								this.name = account;
+								String send = head + "1&";
+								boolean first = true;
+								for (String name:onlineUser)
+								{
+									if (first==true)
+									{
+										send += name;
+										first = false;
+									}
+									else
+									{
+										send +=","+name;
+									}
+									
+								}
+								send += "*";
+								Server.this.sendToAll(send);
+								
+								jta.append("Data received from client: " + recv + "\n");
+								jta.append("Server sends: " + send + "\n");
+								
+							}
+							else
+							{
+								
+							}
+						} 
+						catch (ClassNotFoundException e) 
+						{
+							e.printStackTrace();
+						}
+						
+						
 					}
 					//注册
 					else if (head=='2')
@@ -156,6 +218,7 @@ public class Server extends JFrame
 					
 					
 				}
+				
 			}
 			catch(IOException ex)
 			{
@@ -163,6 +226,25 @@ public class Server extends JFrame
 			}
 		}
 		 
+	}
+	
+	public void sendmsg(DataOutputStream toClient,String msg)
+	{
+		try 
+		{
+			toClient.writeChars(msg);
+		} 
+		catch (IOException e) 
+		{	
+			e.printStackTrace();
+		}
+	}
+	public void sendToAll(String msg)
+	{
+		for (HandleAClient client: clients)
+		{
+			sendmsg(client.outputToClient,msg);
+		}
 	}
 	
 	public static void main(String args[])

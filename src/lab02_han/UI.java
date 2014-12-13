@@ -36,7 +36,8 @@ public class UI extends JFrame
 	 JScrollPane jsp1 = new JScrollPane(text_area1);
 	 JScrollPane jsp2 = new JScrollPane(text_area2);
 	 JScrollPane jsp3 = new JScrollPane(text_area3);
-	
+	 //用户列表
+	 JScrollPane jsp4 = new JScrollPane(jlist);
 	 JPanel p_result;
 
 	
@@ -129,8 +130,7 @@ public class UI extends JFrame
 		jsp2.setPreferredSize(new Dimension(600,140));
 		jsp3.setPreferredSize(new Dimension(600,140));
 		
-		//用户列表
-		JScrollPane jsp4 = new JScrollPane(jlist);
+		
 		jsp4.setBorder(bd5);
 		jsp4.setPreferredSize(new Dimension(200,450));
 		
@@ -594,6 +594,19 @@ public class UI extends JFrame
 				}
 				
 			}
+		}
+		
+		
+	}
+	
+	public void updateUserList(Vector<String> list)
+	{
+		user_list.removeAllElements();
+		
+		jlist.setListData(list);
+		for (String str: list)
+		{
+			System.out.println(str);
 		}
 		
 		
