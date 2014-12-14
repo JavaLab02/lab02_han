@@ -9,6 +9,8 @@ import java.util.*;
 
 import javax.swing.*;
 
+
+
 @SuppressWarnings("serial")
 public class Server extends JFrame
 {
@@ -160,8 +162,13 @@ public class Server extends JFrame
 		 public void handleSearch(String recv) throws IOException
 		 {
 			 //prepare data to send to the client
-			 String send = "0"+GetTranslation.getBaidu(recv)+"&"+GetTranslation.getYoudao(recv)+"&"+GetTranslation.getBing(recv)+"*";
+			 //String send = "0"+GetTranslation.getBaidu(recv)+"&"+GetTranslation.getYoudao(recv)+"&"+GetTranslation.getBing(recv)+"*";
 				
+			 GetTranslation word = new GetTranslation(recv);
+			 word.translate();
+			 String send = "0"+word.getBaiduTranslation()+"&"+word.getYoudaTranslation()+"&"+word.getBingTranslation()+"*";
+			
+			 
 			 //Send Data
 			 outputToClient.writeChars(send);	
 			 jta.append("Data received from client: " + recv + "\n");

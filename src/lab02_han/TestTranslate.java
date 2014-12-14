@@ -1,16 +1,14 @@
 package lab02_han;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class TestTranslate {
 	public static void main(String[] args){
-		String word = "nanjing university";
-		//获取bing在线翻译
-		String bing = GetTranslation.getBing(word);
-		System.out.println("Bing:\n"+bing+"\n");
-		//获取百度在线翻译
-		String baidu = GetTranslation.getBaidu(word);
-		System.out.println("Baidu:\n"+baidu+"\n");
+		String w = "dictionary";
+		GetTranslation word = new GetTranslation(w);
+		word.translate();
+		System.out.println("百度翻译:\n"+word.getBaiduTranslation()+"\n有道翻译：\n"+word.getYoudaTranslation()+"\n必应翻译：\n"+word.getBingTranslation());
 		
-		//获取有道在线翻译
-		String youdao = GetTranslation.getYoudao(word);
-		System.out.println("Youdao:\n"+youdao+"\n");
 	}
 }
