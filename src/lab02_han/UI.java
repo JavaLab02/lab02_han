@@ -17,7 +17,7 @@ public class UI extends JFrame
 	
 	 JButton sign_in = new JButton("µÇÂ¼");
 	 JButton sign_up = new JButton("×¢²á");
-	
+	 JButton log_out = new JButton("log out");
 	 JTextField input = new JTextField(25);
 	 JButton search = new JButton("²éÑ¯");
 	
@@ -44,7 +44,11 @@ public class UI extends JFrame
 	 JPanel p_baidu = new JPanel();
 	 JPanel p_youdao = new JPanel();
 	 JPanel p_bing = new JPanel();
-	
+	 JPanel p1;
+	 
+	 Send send1 ;
+	 Send send2;
+	 Send send3 ;
 	
 	public UI()
 	{
@@ -53,7 +57,7 @@ public class UI extends JFrame
 		text_area2.setLineWrap(true);
 		text_area3.setLineWrap(true);
 				
-		JPanel p1 = new JPanel();
+		p1 = new JPanel();
 		p1.setLayout(new FlowLayout(FlowLayout.LEFT,5,5));
 		p1.add(new JLabel("Online Dictionary"));
 		p1.add(sign_in);
@@ -110,9 +114,9 @@ public class UI extends JFrame
 	
 		
 		
-		final Send send1 = new Send();
-		final Send send2 = new Send();
-		final Send send3 = new Send();
+		send1 = new Send();
+		send2 = new Send();
+		send3 = new Send();
 		
 		p_baidu.add(jsp1, BorderLayout.NORTH);
 		p_baidu.add(send1, BorderLayout.SOUTH);
@@ -176,6 +180,7 @@ public class UI extends JFrame
 			}
 		});
 		
+		/*
 		send1.send.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -202,6 +207,8 @@ public class UI extends JFrame
 				}
 			}
 		});
+		
+		
 		
 		send2.send.addActionListener(new ActionListener()
 		{
@@ -256,8 +263,30 @@ public class UI extends JFrame
 				}
 			}
 		});
+		*/
 		
 		
+	}
+	
+	public void online(String name)
+	{
+		JLabel jlabel = new JLabel(name);
+		p1.removeAll();
+		p1.add(new JLabel("Welcome !    "));
+		p1.add(jlabel);
+		p1.add(log_out);
+		p1.validate();
+		p1.repaint();
+		
+	}
+	public void logout()
+	{
+		p1.removeAll();
+		p1.add(new JLabel("Online Dictionary"));
+		p1.add(sign_in);
+		p1.add(sign_up);
+		p1.validate();
+		p1.repaint();
 	}
 	
 	private void update_check(Object s)

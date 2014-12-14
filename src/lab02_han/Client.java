@@ -19,6 +19,8 @@ public class Client implements Runnable
 	
 	private Vector<String> onlineUserList;
 	
+	private String username;
+	
 	//construction method
 	public Client()
 	{
@@ -42,6 +44,20 @@ public class Client implements Runnable
 		
 		//SignUp button listener 注册按钮
 		ui.sign_up.addActionListener(new SignUpListener());
+		//log out 注销按钮
+		ui.log_out.addActionListener(new LogOutListener());
+		
+		//baidu翻译框的send和点赞
+		ui.send1.send.addActionListener(new sendBaidu());
+		ui.send1.zan.addActionListener(new zanBaidu());
+		
+		//youdao翻译框的send和点赞
+		ui.send2.send.addActionListener(new sendYoudao());
+		ui.send2.zan.addActionListener(new zanYoudao());
+
+		//Bing翻译框的send和点赞
+		ui.send3.send.addActionListener(new sendBing());
+		ui.send3.zan.addActionListener(new zanBing());
 		
 		ConnectionToServer();
 		Thread thread = new Thread(this);
@@ -103,11 +119,12 @@ public class Client implements Runnable
 				//注册
 				else if (head=='2')
 				{
-					
+					handleSignUpFeedback(recv);
 				}
-				else
+				//更新在线用户列表
+				else if (head=='3')
 				{
-					
+					handleUpdateUserList(recv);
 				}
 				
 			}
@@ -143,24 +160,50 @@ public class Client implements Runnable
 		System.out.println(recv);
 		if (temp[0].equals("0"))//登录失败
 		{
-			
+			MyDialog md = new MyDialog(ui,"提示",true,"用户名或密码错误");
+			md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		}
 		else if(temp[0].equals("1"))//成功
 		{
 			String[] names = temp[1].split(",");
+			this.onlineUserList.removeAllElements();
 			for (int i=0; i<names.length; i++)
 			{
 				this.onlineUserList.add(names[i]);
 				System.out.println(names[i]);
 			}
 			ui.updateUserList(onlineUserList);
+			//ui.online(names[names.length-1]);
+			ui.online(username);
 		}
+	}
+	
+	private void handleUpdateUserList(String recv)
+	{
+		String[] names = recv.split(",");
+		this.onlineUserList.removeAllElements();
+		for (int i=0; i<names.length; i++)
+		{
+			this.onlineUserList.add(names[i]);
+			System.out.println(names[i]);
+		}
+		ui.updateUserList(onlineUserList);
 	}
 	
 	//处理注册反馈
 	private void handleSignUpFeedback(String recv)
 	{
-		
+		System.out.println(recv);
+		if (recv.equals("1"))
+		{
+			MyDialog md = new MyDialog(ui,"提示",true,"注册成功");
+			md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		}
+		else
+		{
+			MyDialog md = new MyDialog(ui,"提示",true,"该用户名已存在");
+			md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		}
 	}
 	//handle search button action
 	private class SearchListener implements ActionListener
@@ -253,6 +296,8 @@ public class Client implements Runnable
 							//*作为结束符
 							toServer.writeChars(password+"*");
 							toServer.flush();
+							username = account;
+							signin.dispose();
 							
 						}
 						else
@@ -321,6 +366,7 @@ public class Client implements Runnable
 							//*作为结束符
 							toServer.writeChars(password+"*");
 							toServer.flush();
+							signup.dispose();
 							
 						}
 						else
@@ -345,6 +391,131 @@ public class Client implements Runnable
 			});
 		}
 	}
+	
+	private class LogOutListener implements ActionListener
+	{	
+		public void actionPerformed(ActionEvent e)
+		{
+			String send = "3"+username+"*";
+			ui.logout();
+			onlineUserList.removeAllElements();
+			ui.updateUserList(onlineUserList);
+			
+			try 
+			{
+				toServer.writeChars(send);
+				toServer.flush();
+			} 
+			catch (IOException e1) 
+			{
+				e1.printStackTrace();
+			}
+			
+		}
+	}
+	
+	private class sendBaidu implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			
+			MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
+			md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		}
+	}
+	private class sendYoudao implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			
+			MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
+			md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		}
+	}
+	private class sendBing implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			
+			MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
+			md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		}
+	}
+	private class zanBaidu implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			int i = Integer.parseInt(ui.send1.zan_count.getText());
+			if (ui.send1.zan.getText().equals("赞"))
+			{
+				ui.send1.zan.setText("取消赞");
+				i +=1;
+				ui.send1.zan_count.setText(""+i);
+				ui.send1.label.setVisible(true);
+					
+			}
+			else
+			{
+				ui.send1.zan.setText("赞");
+				i -= 1;
+				ui.send1.zan_count.setText(""+i);
+				ui.send1.label.setVisible(false);
+						
+			}
+		}
+	}
+	
+	private class zanYoudao implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			int i = Integer.parseInt(ui.send2.zan_count.getText());
+			if (ui.send2.zan.getText().equals("赞"))
+			{
+				ui.send2.zan.setText("取消赞");
+				i +=1;
+				ui.send2.zan_count.setText(""+i);
+				ui.send2.label.setVisible(true);
+					
+			}
+			else
+			{
+				i -= 1;
+				ui.send2.zan_count.setText(""+i);
+				ui.send2.zan.setText("赞");
+				ui.send2.label.setVisible(false);
+						
+			}
+		}
+	}
+	
+	private class zanBing implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			int i = Integer.parseInt(ui.send3.zan_count.getText());
+			if (ui.send3.zan.getText().equals("赞"))
+			{
+				ui.send3.zan.setText("取消赞");
+				i += 1;
+				ui.send3.zan_count.setText(""+i);
+				ui.send3.label.setVisible(true);
+					
+			}
+			else
+			{
+				ui.send3.zan.setText("赞");
+				i -= 1;
+				ui.send3.zan_count.setText(""+i);
+				ui.send3.label.setVisible(false);
+						
+			}
+		}
+	}
+	
 	
 	/*	
 	 * 检查字符串是否合法

@@ -128,95 +128,24 @@ public class Server extends JFrame
 					//单词查询
 					if (head=='0')
 					{
-						/*
-						//prepare data to send to the client
-						String send = "0"+GetTranslation.getBaidu(recv)+"&"+GetTranslation.getYoudao(recv)+"&"+GetTranslation.getBing(recv);
-						
-						//Send Data
-						outputToClient.writeChars(send+"*");
-						*/
-						
-						String send = "11&Tom,Bob,Lancy*";
-						Server.this.sendToAll(send);
-						
-						jta.append("Data received from client: " + recv + "\n");
-						jta.append("Server sends: " + send + "\n");
+						handleSearch(recv);
 					}
 					//登录
 					else if(head=='1')
 					{
-						//prepare data to send to the client
-						String[] temp = recv.split("&");
-						String account = temp[0];
-						String password = temp[1];
-						
-						try 
-						{
-							if (DataBaseHandler.isAuthorized(account, password))
-							{
-								onlineClients.add(this);
-								onlineUser.add(account);
-								this.isOnline = true;
-								this.name = account;
-								String send = head + "1&";
-								boolean first = true;
-								for (String name:onlineUser)
-								{
-									if (first==true)
-									{
-										send += name;
-										first = false;
-									}
-									else
-									{
-										send +=","+name;
-									}
-									
-								}
-								send += "*";
-								Server.this.sendToAll(send);
-								
-								jta.append("Data received from client: " + recv + "\n");
-								jta.append("Server sends: " + send + "\n");
-								
-							}
-							else
-							{
-								
-							}
-						} 
-						catch (ClassNotFoundException e) 
-						{
-							e.printStackTrace();
-						}
-						
-						
+						handleSignIn(recv);
 					}
 					//注册
 					else if (head=='2')
 					{
-						//prepare data to send to the client
-						String[] temp = recv.split("&");
-						String account = temp[0];
-						String password = temp[1];
-						String send = "2"+"SignUp \n accont: "+account+"\n password: "+password;
-							
-						//Send Data
-						outputToClient.writeChars(send+"*");
-
-						jta.append("Data received from client: " + recv + "\n");
-						jta.append("Server sends: " + send + "\n");
+						handleSignUp(recv);
 					}
-					
-					else
+					//注销log out
+					else if(head=='3')
 					{
-						
+						handleLogOut(recv);
 					}
 						
-					
-					
-					
-					
 				}
 				
 			}
@@ -225,7 +154,134 @@ public class Server extends JFrame
 				System.err.println(ex);
 			}
 		}
-		 
+		
+		
+		
+		 public void handleSearch(String recv) throws IOException
+		 {
+			 //prepare data to send to the client
+			 String send = "0"+GetTranslation.getBaidu(recv)+"&"+GetTranslation.getYoudao(recv)+"&"+GetTranslation.getBing(recv)+"*";
+				
+			 //Send Data
+			 outputToClient.writeChars(send);	
+			 jta.append("Data received from client: " + recv + "\n");
+			 jta.append("Server sends: " + send + "\n");
+		 }
+		 public void handleSignIn(String recv) throws IOException
+		 {
+			//prepare data to send to the client
+			 String[] temp = recv.split("&");
+			 String account = temp[0];
+			 String password = temp[1];
+				
+			 try 
+			 {
+				 //登录成功
+				 if (DataBaseHandler.isAuthorized(account, password))
+				 {
+					 onlineClients.add(this);
+					 onlineUser.add(account);
+					 this.isOnline = true;
+					 this.name = account;
+					 String send = "1" + "1&";
+					 boolean first = true;
+					 for (String name:onlineUser)
+					 {
+						 if (first==true)
+						 {
+							 send += name;
+							 first = false;
+						 }
+						 else
+						 {
+							 send +=","+name;
+						 }
+							
+					 }
+					 send += "*";
+					 Server.this.sendToAll(send);	
+					 jta.append("Data received from client: " + recv + "\n");
+					 jta.append("Server sends: " + send + "\n");
+						
+				 }
+				 //登录失败
+				 else
+				 {
+					 String send = "1" + "0*";
+					 outputToClient.writeChars(send);
+					 jta.append("Data received from client: " + recv + "\n");
+					 jta.append("Server sends: " + send + "\n");
+				 }
+			 } 
+			 catch (ClassNotFoundException e) 
+			 {
+				 e.printStackTrace();
+			 }
+				
+				
+		 }
+		 public void handleSignUp(String recv) throws IOException
+		 {
+			//prepare data to send to the client
+			String[] temp = recv.split("&");
+			String account = temp[0];
+			String password = temp[1];
+				
+			try 
+			{
+				if (DataBaseHandler.regUser(account, password)==1)
+				{
+					String send = "2" + "1*";
+					outputToClient.writeChars(send);
+					jta.append("Data received from client: " + recv + "\n");
+					jta.append("Server sends: " + send + "\n");
+				}
+				else 
+				{
+					String send = "2" + "0*";
+					outputToClient.writeChars(send);
+					jta.append("Data received from client: " + recv + "\n");
+					jta.append("Server sends: " + send + "\n");
+				}
+			}
+			catch (ClassNotFoundException e) 
+			{
+				e.printStackTrace();
+			}
+		 }
+
+		 public void handleLogOut(String recv)
+		 {
+			 int index = onlineUser.indexOf(recv);
+			 System.out.println(onlineUser.indexOf(recv));
+			 System.out.println(onlineClients.indexOf(this.socket));
+			 onlineUser.remove(onlineUser.indexOf(recv));
+			 //onlineClients.remove(onlineClients.indexOf(this.socket));
+			 //onlineClients.remove(onlineUser.indexOf(recv));
+			 System.out.println(onlineClients.size());
+				
+			 //更新在线用户
+			 String send = "3"+"";
+			 boolean first = true;
+			 for (String name:onlineUser)
+			 {
+				 if (first==true)
+				 {
+					 send += name;
+					 first = false;
+				 }
+				 else
+				 {
+					 send +=","+name;
+				 }
+					
+			 }
+			 send += "*";
+			 Server.this.sendToAll(send);
+				
+			 jta.append("Data received from client: " + recv + "\n");
+			 jta.append("Server sends: " + send + "\n");
+		 }
 	}
 	
 	public void sendmsg(DataOutputStream toClient,String msg)
