@@ -29,6 +29,10 @@ public class Send extends JPanel
 		label.setVisible(false);
 		
 	}
+	public void updatezan(int n)
+	{
+		zan_count.setText(""+n);
+	}
 	
 
 }

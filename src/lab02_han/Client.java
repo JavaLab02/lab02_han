@@ -139,9 +139,12 @@ public class Client implements Runnable
 	private void handleSearchFeedback(String recv)
 	{
 		String[] temp = recv.split("&");
+		/*
 		temp[0].trim();
 		temp[1].trim();
 		temp[2].trim();
+		*/
+		
 		ui.text_area1.setText("");
 		ui.text_area2.setText("");
 		ui.text_area3.setText("");
@@ -150,6 +153,18 @@ public class Client implements Runnable
 		ui.text_area1.append(temp[0]);
 		ui.text_area2.append(temp[1]);
 		ui.text_area3.append(temp[2]);
+		
+		//点赞次数
+		String[] zan = temp[3].split(",");
+		if (zan.equals("0,0,0"))
+			;
+		else
+		{
+			System.out.println(zan[0]+zan[1]+zan[2]);
+			ui.sort_by_zan(zan);
+		}
+		
+		
 	}
 	
 	//处理登录反馈

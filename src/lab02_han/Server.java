@@ -165,8 +165,12 @@ public class Server extends JFrame
 			 //String send = "0"+GetTranslation.getBaidu(recv)+"&"+GetTranslation.getYoudao(recv)+"&"+GetTranslation.getBing(recv)+"*";
 				
 			 GetTranslation word = new GetTranslation(recv);
+			 GetZan zan = new GetZan(recv);
+			 zan.isInDB();
+
 			 word.translate();
-			 String send = "0"+word.getBaiduTranslation()+"&"+word.getYoudaTranslation()+"&"+word.getBingTranslation()+"*";
+			 String send = "0"+word.getBaiduTranslation()+"&"+word.getYoudaTranslation()+"&"+word.getBingTranslation();
+			 send +="&"+zan.getzanBaidu()+","+zan.getzanYoudao()+","+zan.getzanBing()+"*"; 
 			
 			 
 			 //Send Data

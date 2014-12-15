@@ -49,6 +49,11 @@ public class UI extends JFrame
 	 Send send1 ;
 	 Send send2;
 	 Send send3 ;
+	 
+	 //存储赞的次数
+	 int zan_baidu;
+	 int zan_youdao;
+	 int zan_bing;
 	
 	public UI()
 	{
@@ -180,91 +185,7 @@ public class UI extends JFrame
 			}
 		});
 		
-		/*
-		send1.send.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				MyDialog md = new MyDialog(UI.this,"提示",true,"发送成功");
-				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			}
-		});
-		send1.zan.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				if (send1.zan.getText().equals("赞"))
-				{
-					send1.zan.setText("取消赞");
-					send1.label.setVisible(true);
-				
-				}
-				else
-				{
-					send1.zan.setText("赞");
-					send1.label.setVisible(false);
-					
-				}
-			}
-		});
-		
-		
-		
-		send2.send.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				MyDialog md = new MyDialog(UI.this,"提示",true,"发送成功");
-				md.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-			}
-		});
-		send2.zan.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				if (send2.zan.getText().equals("赞"))
-				{
-					send2.zan.setText("取消赞");
-					send2.label.setVisible(true);
-				
-				}
-				else
-				{
-					send2.zan.setText("赞");
-					send2.label.setVisible(false);
-					
-				}
-			}
-		});
-		
-		send3.send.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				MyDialog md = new MyDialog(UI.this,"提示",true,"发送成功");
-				md.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-			}
-		});
-		send3.zan.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				if (send3.zan.getText().equals("赞"))
-				{
-					send3.zan.setText("取消赞");
-					send3.label.setVisible(true);
-				
-				}
-				else
-				{
-					send3.zan.setText("赞");
-					send3.label.setVisible(false);
-					
-				}
-			}
-		});
-		*/
-		
+	
 		
 	}
 	
@@ -641,17 +562,164 @@ public class UI extends JFrame
 		
 	}
 	
-	/*
-	public static void main(String[] args) 
+	
+	
+
+	//根据赞的次数排序
+	public void  sort_by_zan(String[] str)
 	{
-		UI frame = new UI();
-		frame.setTitle("Online Dictionary");
+		zan_baidu = Integer.parseInt(str[0]);
+		zan_youdao = Integer.parseInt(str[1]);
+		zan_bing = Integer.parseInt(str[2]);
+		send1.updatezan(zan_baidu);
+		send2.updatezan(zan_youdao);
+		send3.updatezan(zan_bing);
+		//state==111 
 		
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+		switch (check_state)
+		{
+		//111
+		case 7:
+			if (zan_baidu>=zan_youdao&&zan_baidu>=zan_bing)
+			{
+				if (zan_youdao>=zan_bing)
+				{
+					p_result.removeAll();
+					p_result.add(p_baidu, BorderLayout.NORTH);
+					p_result.add(p_youdao, BorderLayout.CENTER);
+					p_result.add(p_bing, BorderLayout.SOUTH);
+					p_result.validate();
+					p_result.repaint();
+				}
+				else //调换有道和bing
+				{
+					p_result.removeAll();
+					p_result.add(p_baidu, BorderLayout.NORTH);
+					p_result.add(p_bing, BorderLayout.CENTER);
+					p_result.add(p_youdao, BorderLayout.SOUTH);
+					p_result.validate();
+					p_result.repaint();
+				}
+			}
+			else if (zan_youdao>=zan_baidu&&zan_youdao>=zan_bing)
+			{
+				if (zan_baidu>=zan_bing)
+				{
+					p_result.removeAll();
+					p_result.add(p_youdao, BorderLayout.NORTH);
+					p_result.add(p_baidu, BorderLayout.CENTER);
+					p_result.add(p_bing, BorderLayout.SOUTH);
+					p_result.validate();
+					p_result.repaint();
+				}
+				else
+				{
+					p_result.removeAll();
+					p_result.add(p_youdao, BorderLayout.NORTH);
+					p_result.add(p_bing, BorderLayout.CENTER);
+					p_result.add(p_baidu, BorderLayout.SOUTH);
+					p_result.validate();
+					p_result.repaint();
+				}
+			}
+			else if (zan_bing>=zan_baidu&&zan_bing>=zan_youdao)
+			{
+				if (zan_baidu>=zan_youdao)
+				{
+					p_result.removeAll();
+					p_result.add(p_bing, BorderLayout.NORTH);
+					p_result.add(p_baidu, BorderLayout.CENTER);
+					p_result.add(p_youdao, BorderLayout.SOUTH);
+					p_result.validate();
+					p_result.repaint();
+				}
+				else
+				{
+					p_result.removeAll();
+					p_result.add(p_bing, BorderLayout.NORTH);
+					p_result.add(p_youdao, BorderLayout.CENTER);
+					p_result.add(p_baidu, BorderLayout.SOUTH);
+					p_result.validate();
+					p_result.repaint();
+				}
+			}
+			break;
+		//110	
+		case 6:
+			if (zan_baidu>=zan_youdao)
+			{
+				p_result.removeAll();
+				p_result.add(p_baidu, BorderLayout.NORTH);
+				p_result.add(p_youdao, BorderLayout.CENTER);
+				p_result.validate();
+				p_result.repaint();
+			}
+			else
+			{
+				p_result.removeAll();
+				p_result.add(p_youdao, BorderLayout.NORTH);
+				p_result.add(p_baidu, BorderLayout.CENTER);
+				p_result.validate();
+				p_result.repaint();
+			}
+			break;
+		//101	
+		case 5:
+			if (zan_baidu>zan_bing)
+			{
+				p_result.removeAll();
+				p_result.add(p_baidu, BorderLayout.NORTH);
+				p_result.add(p_bing, BorderLayout.CENTER);
+				p_result.validate();
+				p_result.repaint();
+			}
+			else
+			{
+				p_result.removeAll();
+				p_result.add(p_bing, BorderLayout.NORTH);
+				p_result.add(p_baidu, BorderLayout.CENTER);
+				p_result.validate();
+				p_result.repaint();
+			}
+			break;
+		//100	
+		case 4: //do nothing
+			break;
+		//011	
+		case 3:
+			if (zan_youdao>=zan_bing)
+			{
+				p_result.removeAll();
+				p_result.add(p_youdao, BorderLayout.NORTH);
+				p_result.add(p_bing, BorderLayout.CENTER);
+				p_result.validate();
+				p_result.repaint();
+			}
+			else
+			{
+				p_result.removeAll();
+				p_result.add(p_bing, BorderLayout.NORTH);
+				p_result.add(p_youdao, BorderLayout.CENTER);
+				p_result.validate();
+				p_result.repaint();
+			}
+			break;
+		//010	
+		case 2: //do nothing
+			break;
+		//001	
+		case 1: //do nothing
+			break;
+		//000	
+		case 0: //do nothing
+			break;
+		default:;
+			
+		}
+		
+		
+		
 	}
-	*/
+
 
 }
