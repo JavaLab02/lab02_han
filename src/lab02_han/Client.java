@@ -3,6 +3,7 @@ package lab02_han;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.*;
 import java.util.Vector;
@@ -33,7 +34,7 @@ public class Client implements Runnable
 		ui.setTitle("Online Dictionary");
 		ui.pack();
 		ui.setLocationRelativeTo(null);
-		ui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//ui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ui.setVisible(true);
 		onlineUserList = new Vector<String>();
 		wordToSearch="";
@@ -688,7 +689,8 @@ public class Client implements Runnable
 		return true;
 	}
 	
-		
+	
+
 
 	
 	

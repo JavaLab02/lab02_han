@@ -6,6 +6,9 @@ package lab02_han;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.*;
@@ -721,5 +724,31 @@ public class UI extends JFrame
 		
 	}
 
+	void sendQuitMsg(DataOutputStream toServer)
+	{
+		
+	}
+	
+	protected void processWindowEvent(WindowEvent e)
+	{
+		
+		 if (e.getID() == WindowEvent.WINDOW_CLOSING) 
+		 {  
+			 if (JOptionPane.showConfirmDialog(this, "确实要关闭？", "确认", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) 
+			 {
+				 System.exit(0);  
+			 } 
+			 else 
+			 {  
+	            //do nothing
+			 }  
+	        } 
+		 else 
+		 {    
+			 super.processWindowEvent(e);      
+		 }  
+		
+	}
+	
 
 }

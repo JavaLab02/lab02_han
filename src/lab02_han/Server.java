@@ -19,7 +19,8 @@ public class Server extends JFrame
 	static ArrayList<HandleAClient> clients;
 	static ArrayList<HandleAClient> onlineClients;
 	static Vector<String> onlineUser;
-	
+	//Number of clients
+	int clientNo = 0;
 	
 	public Server()
 	{
@@ -42,10 +43,10 @@ public class Server extends JFrame
 			ServerSocket serversocket = new ServerSocket(8000);
 			jta.append("Server start at "+new Date() + '\n');
 			
-			//Number a client
-			int clientNo = 1;
 			while(true)
 			{
+				//Increment clientNo
+				clientNo ++;
 				//listen for a new connection request
 				Socket socket = serversocket.accept();
 				
@@ -59,16 +60,12 @@ public class Server extends JFrame
 				
 				//create a new thread for the connection
 				HandleAClient task = new HandleAClient(socket);
-				
+				task.no = clientNo;
 				//加入客户端链表
 				clients.add(task);
 				
 				//start a new thread
 				new Thread(task).start();
-				
-				//Increment clientNo
-				clientNo ++;
-				
 			}
 		}
 		catch(IOException ex)
@@ -85,6 +82,8 @@ public class Server extends JFrame
 		Socket socket; 
 		//user's name
 		String name;
+		//number of the client
+		int no;
 		
 		boolean isOnline;
 		
@@ -148,13 +147,41 @@ public class Server extends JFrame
 					{
 						
 					}
+					
+					//处理客户端窗口关闭
+					else if (head=='-')
+					{
+						
+						
+					}
 						
 				}
 				
 			}
 			catch(IOException ex)
 			{
-				System.err.println(ex);
+				if (isOnline)
+				{
+					
+					int index1 = onlineClients.indexOf(this);
+					int index2 = onlineUser.indexOf(name);
+					int index3 = clients.indexOf(this);
+					//System.out.println("Online+ "+index1+" "+" "+index2);
+					onlineClients.remove(index1);
+					onlineUser.remove(index2);
+					clients.remove(index3);
+				}
+				else
+				{
+					
+					int index = clients.indexOf(this);
+					//System.out.println("off line "+index);
+					clients.remove(index);
+				}
+				
+				jta.append("Client "+ this.no +" socket closed! \n");
+				System.out.println(ex+"断开连接");
+				
 			}
 		}
 		
@@ -195,7 +222,7 @@ public class Server extends JFrame
 					 rmRelogin(account);					
 					 onlineClients.add(this);
 					 onlineUser.add(account);
-					 System.out.print(onlineClients.size()+" and  "+onlineUser.size());
+					
 					 this.isOnline = true;
 					 this.name = account;
 					 String send = "1" + "1&";
@@ -215,7 +242,7 @@ public class Server extends JFrame
 					 }
 					 send += "*";
 					 Server.this.sendToOnline(send);
-					 System.out.println("in send");
+					
 					 jta.append("Data received from client: " + recv + "\n");
 					 jta.append("Server sends: " + send + "\n");
 					 
@@ -270,13 +297,9 @@ public class Server extends JFrame
 		 {
 			 int name_index = onlineUser.indexOf(recv);
 			 int client_index = onlineClients.indexOf(this);
-			 System.out.println("name+"+name_index);
-			 System.out.println("client+"+client_index);
 			 onlineUser.remove(name_index);
 			 onlineClients.remove(client_index);
-			 //onlineClients.remove(onlineClients.indexOf(this.socket));
-			 //onlineClients.remove(onlineUser.indexOf(recv));
-			 System.out.println(onlineClients.size());
+		
 				
 			 //更新在线用户
 			 String send = "3"+"";
@@ -307,10 +330,6 @@ public class Server extends JFrame
 			 
 			 
 		 }
-		 
-		 
-		 
-		 
 	}
 	
 	public void sendmsg(DataOutputStream toClient,String msg)
@@ -348,8 +367,6 @@ public class Server extends JFrame
 		{
 			if (client.name.equalsIgnoreCase(name)	)
 			{
-				
-				System.out.print("int log out "+ onlineClients.indexOf(client)+"  " +onlineUser.indexOf(name));
 				String send = "5out*";
 				sendmsg(client.outputToClient,send);
 				onlineClients.remove(onlineClients.indexOf(client));
