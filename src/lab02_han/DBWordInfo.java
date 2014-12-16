@@ -73,10 +73,10 @@ public class DBWordInfo {
 			}else{
 				String insertSQL = "insert into WordInfo(word,zanBaidu,zanYoudao,zanBing)"+" values(?,?,?,?)";
 				InsertPreStatement = connection.prepareStatement(insertSQL);
-				InsertPreStatement.setString(2, word);
-				InsertPreStatement.setInt(1,zanBaidu);
-				InsertPreStatement.setInt(2,zanYoudao);
-				InsertPreStatement.setInt(3,zanBing);
+				InsertPreStatement.setString(1, word);
+				InsertPreStatement.setInt(2,zanBaidu);
+				InsertPreStatement.setInt(3,zanYoudao);
+				InsertPreStatement.setInt(4,zanBing);
 				InsertPreStatement.executeUpdate();
 			}
 			return true;

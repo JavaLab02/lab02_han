@@ -109,12 +109,7 @@ public class Server extends JFrame
 				
 				//Continuously serve the client
 				while(true)
-				{
-					if (!socket.isConnected())
-					{
-						System.out.print("connected");
-					}
-					
+				{	
 					//Receive Data from the client
 					char head;
 					char ch;
@@ -146,6 +141,12 @@ public class Server extends JFrame
 					else if(head=='3')
 					{
 						handleLogOut(recv);
+					}
+					
+					//向某在线用户发送单词卡
+					else if (head == '4')
+					{
+						
 					}
 						
 				}
@@ -210,9 +211,11 @@ public class Server extends JFrame
 							
 					 }
 					 send += "*";
-					 Server.this.sendToAll(send);	
+					 Server.this.sendToOnline(send);
+					 System.out.println("in send");
 					 jta.append("Data received from client: " + recv + "\n");
 					 jta.append("Server sends: " + send + "\n");
+					 
 						
 				 }
 				 //登录失败
@@ -263,10 +266,12 @@ public class Server extends JFrame
 
 		 public void handleLogOut(String recv)
 		 {
-			 int index = onlineUser.indexOf(recv);
-			 System.out.println(onlineUser.indexOf(recv));
-			 System.out.println(onlineClients.indexOf(this.socket));
-			 onlineUser.remove(onlineUser.indexOf(recv));
+			 int name_index = onlineUser.indexOf(recv);
+			 int client_index = onlineClients.indexOf(this);
+			 System.out.println("name+"+name_index);
+			 System.out.println("client+"+client_index);
+			 onlineUser.remove(name_index);
+			 onlineClients.remove(client_index);
 			 //onlineClients.remove(onlineClients.indexOf(this.socket));
 			 //onlineClients.remove(onlineUser.indexOf(recv));
 			 System.out.println(onlineClients.size());
@@ -288,11 +293,22 @@ public class Server extends JFrame
 					
 			 }
 			 send += "*";
-			 Server.this.sendToAll(send);
+			 Server.this.sendToOnline(send);
 				
 			 jta.append("Data received from client: " + recv + "\n");
 			 jta.append("Server sends: " + send + "\n");
 		 }
+		 
+		 public void handleSendWordCard(String username, String word)
+		 {
+			 
+			 
+			 
+		 }
+		 
+		 
+		 
+		 
 	}
 	
 	public void sendmsg(DataOutputStream toClient,String msg)
@@ -306,11 +322,20 @@ public class Server extends JFrame
 			e.printStackTrace();
 		}
 	}
-	public void sendToAll(String msg)
+	public void sendToOnline(String msg)
 	{
-		for (HandleAClient client: clients)
+		for (HandleAClient client: onlineClients)
 		{
 			sendmsg(client.outputToClient,msg);
+		}
+	}
+	
+	public void sendToUser(String username, String msg)
+	{
+		for (HandleAClient client: onlineClients)
+		{
+			if (client.name.equalsIgnoreCase(username));
+				sendmsg(client.outputToClient,msg);
 		}
 	}
 	

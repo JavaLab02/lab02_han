@@ -21,9 +21,14 @@ public class Client implements Runnable
 	
 	private String username;
 	
+	DBWordInfo wordinfo;
+	
+	String wordToSearch;
+	
 	//construction method
 	public Client()
 	{
+		wordinfo = new DBWordInfo();
 		ui = new UI();
 		ui.setTitle("Online Dictionary");
 		ui.pack();
@@ -31,7 +36,7 @@ public class Client implements Runnable
 		ui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ui.setVisible(true);
 		onlineUserList = new Vector<String>();
-		
+		wordToSearch="";
 		
 		/*
 		 * 设置UI中需要传递数据的按键监听类
@@ -127,6 +132,12 @@ public class Client implements Runnable
 					handleUpdateUserList(recv);
 				}
 				
+				//
+				else if (head=='4')
+				{
+					handleSendWordCard(recv);
+				}
+				
 			}
 		}
 		catch(IOException ex)
@@ -145,6 +156,7 @@ public class Client implements Runnable
 		temp[2].trim();
 		*/
 		
+		
 		ui.text_area1.setText("");
 		ui.text_area2.setText("");
 		ui.text_area3.setText("");
@@ -154,13 +166,15 @@ public class Client implements Runnable
 		ui.text_area2.append(temp[1]);
 		ui.text_area3.append(temp[2]);
 		
+		
+		
 		//点赞次数
 		String[] zan = temp[3].split(",");
 		if (zan.equals("0,0,0"))
 			;
 		else
 		{
-			System.out.println(zan[0]+zan[1]+zan[2]);
+			//System.out.println(zan[0]+zan[1]+zan[2]);
 			ui.sort_by_zan(zan);
 		}
 		
@@ -182,26 +196,30 @@ public class Client implements Runnable
 		{
 			String[] names = temp[1].split(",");
 			this.onlineUserList.removeAllElements();
+			
 			for (int i=0; i<names.length; i++)
 			{
 				this.onlineUserList.add(names[i]);
-				System.out.println(names[i]);
+				//System.out.println(names[i]);
 			}
+			
 			ui.updateUserList(onlineUserList);
-			//ui.online(names[names.length-1]);
 			ui.online(username);
 		}
 	}
 	
+	//处理更新在线用户列表
 	private void handleUpdateUserList(String recv)
 	{
 		String[] names = recv.split(",");
 		this.onlineUserList.removeAllElements();
+		
 		for (int i=0; i<names.length; i++)
 		{
 			this.onlineUserList.add(names[i]);
-			System.out.println(names[i]);
+			//System.out.println(names[i]);
 		}
+		
 		ui.updateUserList(onlineUserList);
 	}
 	
@@ -219,6 +237,11 @@ public class Client implements Runnable
 			MyDialog md = new MyDialog(ui,"提示",true,"该用户名已存在");
 			md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		}
+	}
+	
+	private void handleSendWordCard(String recv)
+	{
+		
 	}
 	//handle search button action
 	private class SearchListener implements ActionListener
@@ -243,12 +266,16 @@ public class Client implements Runnable
 					/*
 					 * send word to Server
 					 */
+					ui.send1.initial();
+					ui.send2.initial();
+					ui.send3.initial();
 					word = word.trim();
 					//数据首字符为0，表示查询
 					toServer.writeChars("0");
 					//末尾加*，表示结束符
 					toServer.writeChars(word+"*");
 					toServer.flush();
+					wordToSearch = word;
 					
 				}
 				else
@@ -358,6 +385,7 @@ public class Client implements Runnable
 						//获取用户名个密码
 						String account = signup.account.getText();
 						String password = signup.password.getText();
+						String password2 = signup.confirmPassword.getText();
 						
 						//判断是否为空
 						if (account==null || account.replace(" ", "").equals("") || password==null || password.replace(" ", "").equals("") )
@@ -369,6 +397,11 @@ public class Client implements Runnable
 						else if(account.length()>=20 || password.length()>=20)
 						{
 							MyDialog md = new MyDialog(signup,"提示",true,"用户名和密码不能超过20字节");
+							md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						}
+						else if (! password.equals(password2))
+						{
+							MyDialog md = new MyDialog(signup,"提示",true,"密码不一致");
 							md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 						}
 						
@@ -433,9 +466,33 @@ public class Client implements Runnable
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			String send = ui.text_area1.getText();
+			String username = ui.send1.input.getText().trim();
+			if (username.length()>0)
+			{
+				if (send.length()>0)
+				{
+					
+					
+					
+					MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
+					md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				}
+				else
+				{
+					MyDialog md = new MyDialog(ui,"提示",true,"发送内容不能为空");
+					md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				}
+			}
+			else
+			{
+				MyDialog md = new MyDialog(ui,"提示",true,"用户名不能为空");
+				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
 			
-			MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
-			md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			
+			
+			
 		
 		}
 	}
@@ -463,23 +520,35 @@ public class Client implements Runnable
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			int i = Integer.parseInt(ui.send1.zan_count.getText());
-			if (ui.send1.zan.getText().equals("赞"))
+			String content = ui.text_area1.getText();
+			if(content.length()>0)	
 			{
-				ui.send1.zan.setText("取消赞");
-				i +=1;
-				ui.send1.zan_count.setText(""+i);
-				ui.send1.label.setVisible(true);
-					
+				int i = Integer.parseInt(ui.send1.zan_count.getText());
+				if (ui.send1.zan.getText().equals("赞"))
+				{
+					ui.send1.zan.setText("取消赞");
+					i +=1;
+					ui.send1.zan_count.setText(""+i);
+					ui.send1.label.setVisible(true);
+					wordinfo.Update(wordToSearch, 1, 0, 0);
+						
+				}
+				else
+				{
+					ui.send1.zan.setText("赞");
+					i -= 1;
+					ui.send1.zan_count.setText(""+i);
+					ui.send1.label.setVisible(false);
+					wordinfo.Update(wordToSearch, -1, 0, 0);
+							
+				}
 			}
 			else
 			{
-				ui.send1.zan.setText("赞");
-				i -= 1;
-				ui.send1.zan_count.setText(""+i);
-				ui.send1.label.setVisible(false);
-						
+				MyDialog md = new MyDialog(ui,"提示",true,"无单词内容");
+				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
+			
 		}
 	}
 	
@@ -487,22 +556,33 @@ public class Client implements Runnable
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			int i = Integer.parseInt(ui.send2.zan_count.getText());
-			if (ui.send2.zan.getText().equals("赞"))
+			String content = ui.text_area2.getText();
+			if(content.length()>0)	
 			{
-				ui.send2.zan.setText("取消赞");
-				i +=1;
-				ui.send2.zan_count.setText(""+i);
-				ui.send2.label.setVisible(true);
-					
+				int i = Integer.parseInt(ui.send2.zan_count.getText());
+				if (ui.send2.zan.getText().equals("赞"))
+				{
+					ui.send2.zan.setText("取消赞");
+					i +=1;
+					ui.send2.zan_count.setText(""+i);
+					ui.send2.label.setVisible(true);
+					wordinfo.Update(wordToSearch, 0, 1, 0);
+						
+				}
+				else
+				{
+					i -= 1;
+					ui.send2.zan_count.setText(""+i);
+					ui.send2.zan.setText("赞");
+					ui.send2.label.setVisible(false);
+					wordinfo.Update(wordToSearch, 0, -1, 0);
+							
+				}
 			}
 			else
 			{
-				i -= 1;
-				ui.send2.zan_count.setText(""+i);
-				ui.send2.zan.setText("赞");
-				ui.send2.label.setVisible(false);
-						
+				MyDialog md = new MyDialog(ui,"提示",true,"无单词内容");
+				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 		}
 	}
@@ -511,23 +591,35 @@ public class Client implements Runnable
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			int i = Integer.parseInt(ui.send3.zan_count.getText());
-			if (ui.send3.zan.getText().equals("赞"))
+			String content = ui.text_area3.getText();
+			if(content.length()>0)	
 			{
-				ui.send3.zan.setText("取消赞");
-				i += 1;
-				ui.send3.zan_count.setText(""+i);
-				ui.send3.label.setVisible(true);
-					
+				int i = Integer.parseInt(ui.send3.zan_count.getText());
+				if (ui.send3.zan.getText().equals("赞"))
+				{
+					ui.send3.zan.setText("取消赞");
+					i += 1;
+					ui.send3.zan_count.setText(""+i);
+					ui.send3.label.setVisible(true);
+					wordinfo.Update(wordToSearch, 0, 0, 1);
+						
+				}
+				else
+				{
+					ui.send3.zan.setText("赞");
+					i -= 1;
+					ui.send3.zan_count.setText(""+i);
+					ui.send3.label.setVisible(false);
+					wordinfo.Update(wordToSearch, 0, 0, -1);
+							
+				}
 			}
 			else
 			{
-				ui.send3.zan.setText("赞");
-				i -= 1;
-				ui.send3.zan_count.setText(""+i);
-				ui.send3.label.setVisible(false);
-						
+				MyDialog md = new MyDialog(ui,"提示",true,"无单词内容");
+				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
+			
 		}
 	}
 	

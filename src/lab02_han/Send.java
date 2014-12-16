@@ -19,7 +19,7 @@ public class Send extends JPanel
 		this.setLayout(new FlowLayout(FlowLayout.LEFT,5,5));
 		label.setForeground(Color.RED);
 		zan_count.setForeground(Color.RED);
-		add(new JLabel("用户ID:"));
+		add(new JLabel("用户名:"));
 		add(input);
 		add(send);
 		add(zan);
@@ -27,11 +27,20 @@ public class Send extends JPanel
 		add(zan_count);
 		add(label);
 		label.setVisible(false);
+		zan_count.setVisible(false);
 		
 	}
 	public void updatezan(int n)
 	{
+		zan_count.setVisible(true);
 		zan_count.setText(""+n);
+	}
+	
+	public void initial()
+	{
+		zan.setText("赞");
+		zan_count.setVisible(false);
+		label.setVisible(false);
 	}
 	
 
