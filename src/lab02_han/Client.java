@@ -20,11 +20,15 @@ public class Client implements Runnable
 	
 	private Vector<String> onlineUserList;
 	
+	private Vector<String> otherUserList;
+	//用户名
 	private String username;
-	
+	//单词信息数据库
 	DBWordInfo wordinfo;
-	
+	//记录目前查询的单词
 	String wordToSearch;
+	//是否在线
+	boolean isOnline;
 	
 	//construction method
 	public Client()
@@ -37,7 +41,9 @@ public class Client implements Runnable
 		//ui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ui.setVisible(true);
 		onlineUserList = new Vector<String>();
+		otherUserList = new Vector<String>();
 		wordToSearch="";
+		isOnline = false;
 		
 		/*
 		 * 设置UI中需要传递数据的按键监听类
@@ -199,6 +205,7 @@ public class Client implements Runnable
 		}
 		else if(temp[0].equals("1"))//成功
 		{
+			isOnline = true;
 			String[] names = temp[1].split(",");
 			this.onlineUserList.removeAllElements();
 			
@@ -210,6 +217,14 @@ public class Client implements Runnable
 			
 			ui.updateUserList(onlineUserList);
 			ui.online(username);
+			otherUserList.removeAllElements();
+			for (String str:onlineUserList)
+			{
+				if ( !str.equals(username))
+					otherUserList.add(str);
+			}
+			
+			ui.updateSendList(otherUserList);
 		}
 	}
 	
@@ -487,33 +502,40 @@ public class Client implements Runnable
 		public void actionPerformed(ActionEvent e)
 		{
 			String send = ui.text_area1.getText();
-			String username = ui.send1.input.getText().trim();
-			if (username.length()>0)
+			//String username = ui.send1.input.getText().trim();
+			String username = (String) ui.send1.input.getSelectedItem();
+			
+			if (isOnline)
 			{
-				if (send.length()>0)
+				if (username.length()>0)
 				{
-					
-					
-					
-					MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
-					md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					if (send.length()>0)
+					{
+						
+						
+						
+						MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
+						md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					}
+					else
+					{
+						MyDialog md = new MyDialog(ui,"提示",true,"发送内容不能为空");
+						md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					}
 				}
 				else
 				{
-					MyDialog md = new MyDialog(ui,"提示",true,"发送内容不能为空");
+					MyDialog md = new MyDialog(ui,"提示",true,"用户名不能为空");
 					md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				}
+				
 			}
 			else
 			{
-				MyDialog md = new MyDialog(ui,"提示",true,"用户名不能为空");
+				MyDialog md = new MyDialog(ui,"提示",true,"请先登录");
 				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
-			
-			
-			
-			
-		
+
 		}
 	}
 	private class sendYoudao implements ActionListener

@@ -555,14 +555,7 @@ public class UI extends JFrame
 	public void updateUserList(Vector<String> list)
 	{
 		user_list.removeAllElements();
-		
 		jlist.setListData(list);
-		for (String str: list)
-		{
-			System.out.println(str);
-		}
-		
-		
 	}
 	
 	
@@ -724,9 +717,11 @@ public class UI extends JFrame
 		
 	}
 
-	void sendQuitMsg(DataOutputStream toServer)
+	void updateSendList(Vector<String> vec)
 	{
-		
+		send1.updateList(vec);
+		send2.updateList(vec);
+		send3.updateList(vec);
 	}
 	
 	protected void processWindowEvent(WindowEvent e)
