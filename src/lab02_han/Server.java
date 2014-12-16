@@ -191,8 +191,11 @@ public class Server extends JFrame
 				 //µÇÂ¼³É¹¦
 				 if (DataBaseHandler.isAuthorized(account, password))
 				 {
+					//É¾³ýÖØ¸´µÇÂ¼
+					 rmRelogin(account);					
 					 onlineClients.add(this);
 					 onlineUser.add(account);
+					 System.out.print(onlineClients.size()+" and  "+onlineUser.size());
 					 this.isOnline = true;
 					 this.name = account;
 					 String send = "1" + "1&";
@@ -216,7 +219,6 @@ public class Server extends JFrame
 					 jta.append("Data received from client: " + recv + "\n");
 					 jta.append("Server sends: " + send + "\n");
 					 
-						
 				 }
 				 //µÇÂ¼Ê§°Ü
 				 else
@@ -338,7 +340,26 @@ public class Server extends JFrame
 				sendmsg(client.outputToClient,msg);
 		}
 	}
-	
+	//É¾³ýÖØ¸´µÇÂ¼£¬±»¶¥ÏÂÏß
+	public boolean rmRelogin(String name)
+	{
+		name = name.trim();
+		for (HandleAClient client: onlineClients)
+		{
+			if (client.name.equalsIgnoreCase(name)	)
+			{
+				
+				System.out.print("int log out "+ onlineClients.indexOf(client)+"  " +onlineUser.indexOf(name));
+				String send = "5out*";
+				sendmsg(client.outputToClient,send);
+				onlineClients.remove(onlineClients.indexOf(client));
+				onlineUser.remove(onlineUser.indexOf(name));
+				return true;
+			}
+			
+		}
+		return false;
+	}
 	public static void main(String args[])
 	{
 		new Server();

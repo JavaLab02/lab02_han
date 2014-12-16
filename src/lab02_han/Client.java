@@ -132,10 +132,14 @@ public class Client implements Runnable
 					handleUpdateUserList(recv);
 				}
 				
-				//
+				//处理单词卡信息
 				else if (head=='4')
 				{
 					handleSendWordCard(recv);
+				}
+				else if(head == '5')
+				{
+					handleForceLogOut(recv);
 				}
 				
 			}
@@ -243,6 +247,20 @@ public class Client implements Runnable
 	{
 		
 	}
+	//处理被顶强迫下线
+	private void handleForceLogOut(String recv)
+	{
+		if (recv.endsWith("out"))
+		{
+			ui.logout();
+			onlineUserList.removeAllElements();
+			ui.updateUserList(onlineUserList);
+			MyDialog md = new MyDialog(ui ,"提示",true,"Log out!您的帐号在其他地点登录");
+			md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		}
+		
+	}
+	
 	//handle search button action
 	private class SearchListener implements ActionListener
 	{
@@ -440,6 +458,7 @@ public class Client implements Runnable
 		}
 	}
 	
+	//下线按钮监听
 	private class LogOutListener implements ActionListener
 	{	
 		public void actionPerformed(ActionEvent e)
