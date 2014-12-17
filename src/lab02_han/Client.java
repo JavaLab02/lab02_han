@@ -140,10 +140,10 @@ public class Client implements Runnable
 					updateSendList();
 				}
 				
-				//处理单词卡信息
+				//处理接收单词卡信息
 				else if (head=='4')
 				{
-					handleSendWordCard(recv);
+					handleReceiveWordCard(recv);
 				}
 				
 				//处理被迫下线
@@ -268,9 +268,17 @@ public class Client implements Runnable
 		}
 	}
 	
-	private void handleSendWordCard(String recv)
+	private void handleReceiveWordCard(String recv)
 	{
-		ui.text_area1.setText(recv);
+		 
+		
+		String[] temp = recv.split("&");
+		WordCard card = new WordCard();
+		card.setContent(temp[0], temp[1]);
+		ui.addWordCard(temp[0],card);
+		MyDialog md = new MyDialog(ui,"提示",true,"<html> <body> "+"您收到一张单词卡 ("+temp[0]+ ") <br> "+"请在“我的单词卡”中查看"+ " <body> </html> ");
+		md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		/*
 		final WordCard card = new WordCard();
 		card.setTitle("单词卡");
 		String[] temp = recv.split("&");
@@ -279,6 +287,7 @@ public class Client implements Runnable
 		card.setLocationRelativeTo(null);
 		card.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		card.setVisible(true);
+		*/
 	}
 	//处理被顶强迫下线
 	private void handleForceLogOut(String recv)
@@ -544,7 +553,7 @@ public class Client implements Runnable
 						}
 						
 						
-						MyDialog md = new MyDialog(ui,"提示",true,"发送成功"+username);
+						MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
 						md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					}
 					else
@@ -568,24 +577,103 @@ public class Client implements Runnable
 
 		}
 	}
+	
+	
 	private class sendYoudao implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			String content = ui.text_area2.getText();
+			String username = (String) ui.send2.input.getSelectedItem();
 			
-			MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
-			md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
+			if (isOnline)
+			{
+				if (username!=null )//&& username.length()>0)
+				{
+					if (content!=null && content.length()>0)
+					{
+						String send = "4"+ username+"&"+wordToSearch+"&"+ content +"*";
+						try 
+						{
+							toServer.writeChars(send);
+							toServer.flush();
+						} 
+						catch (IOException e1) 
+						{
+							e1.printStackTrace();
+						}
+						
+						
+						MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
+						md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					}
+					else
+					{
+						MyDialog md = new MyDialog(ui,"提示",true,"发送内容不能为空");
+						md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					}
+				}
+				else
+				{
+					MyDialog md = new MyDialog(ui,"提示",true,"用户名不能为空");
+					md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				}
+				
+			}
+			else
+			{
+				MyDialog md = new MyDialog(ui,"提示",true,"请先登录");
+				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+
 		}
 	}
 	private class sendBing implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			
-			MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
-			md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
+			String content = ui.text_area3.getText();
+			String username = (String) ui.send3.input.getSelectedItem();
+			if (isOnline)
+			{
+				if (username!=null )//&& username.length()>0)
+				{
+					if (content!=null && content.length()>0)
+					{
+						String send = "4"+ username+"&"+wordToSearch+"&"+ content +"*";
+						try 
+						{
+							toServer.writeChars(send);
+							toServer.flush();
+						} 
+						catch (IOException e1) 
+						{
+							e1.printStackTrace();
+						}
+						
+						
+						MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
+						md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					}
+					else
+					{
+						MyDialog md = new MyDialog(ui,"提示",true,"发送内容不能为空");
+						md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					}
+				}
+				else
+				{
+					MyDialog md = new MyDialog(ui,"提示",true,"用户名不能为空");
+					md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				}
+				
+			}
+			else
+			{
+				MyDialog md = new MyDialog(ui,"提示",true,"请先登录");
+				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+
 		}
 	}
 	private class zanBaidu implements ActionListener
@@ -623,6 +711,8 @@ public class Client implements Runnable
 			
 		}
 	}
+	
+	
 	
 	private class zanYoudao implements ActionListener
 	{

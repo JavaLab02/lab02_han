@@ -313,7 +313,6 @@ public class Server extends JFrame
 			 else
 			 {
 				 sendToUser(temp[0],send);
-				 System.out.println("in send user");
 			 }
 			 
 			 
@@ -368,7 +367,6 @@ public class Server extends JFrame
 		{
 			if (client.name.equalsIgnoreCase(username))
 			{
-				System.out.println("send one "+client.name+" & "+username);
 				sendmsg(client.outputToClient,msg);
 			}
 		}

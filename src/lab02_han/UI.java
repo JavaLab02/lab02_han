@@ -14,6 +14,8 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
+
+
 @SuppressWarnings("serial")
 public class UI extends JFrame
 {
@@ -21,6 +23,7 @@ public class UI extends JFrame
 	 JButton sign_in = new JButton("登录");
 	 JButton sign_up = new JButton("注册");
 	 JButton log_out = new JButton("log out");
+	 
 	 JTextField input = new JTextField(25);
 	 JButton search = new JButton("查询");
 	
@@ -57,6 +60,11 @@ public class UI extends JFrame
 	 int zan_baidu;
 	 int zan_youdao;
 	 int zan_bing;
+	 
+	 //单词卡列表相关变量
+	 JButton jbtcardlist = new JButton("我的单词卡");
+	 Vector <String> words = new Vector<String>();
+	 Vector <WordCard> cards = new Vector<WordCard>();
 	
 	public UI()
 	{
@@ -64,10 +72,12 @@ public class UI extends JFrame
 		text_area1.setLineWrap(true);
 		text_area2.setLineWrap(true);
 		text_area3.setLineWrap(true);
+		//设置不可编辑
 		text_area1.setEditable(false);	
 		text_area2.setEditable(false);	
 		text_area3.setEditable(false);	
-
+		
+		//单词卡列表
 		
 		p1 = new JPanel();
 		p1.setLayout(new FlowLayout(FlowLayout.LEFT,5,5));
@@ -163,7 +173,18 @@ public class UI extends JFrame
 		add(p_north,BorderLayout.NORTH);
 		add(p_south,BorderLayout.SOUTH);
 		
-		
+		jbtcardlist.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				final WordCardList temp = new WordCardList();
+				temp.setTitle("我的单词卡");
+				temp.setVisible(true);
+				temp.setContent(words, cards);
+				temp.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+				temp.pack();
+			}
+		});
 		
 		baidu.addActionListener(new ActionListener()
 		{
@@ -203,6 +224,7 @@ public class UI extends JFrame
 		p1.add(new JLabel("Welcome !    "));
 		p1.add(jlabel);
 		p1.add(log_out);
+		p1.add(jbtcardlist);
 		p1.validate();
 		p1.repaint();
 		
@@ -726,6 +748,14 @@ public class UI extends JFrame
 		send1.updateList(vec);
 		send2.updateList(vec);
 		send3.updateList(vec);
+	}
+	
+	
+	public void addWordCard(String word, WordCard card)
+	{
+		words.add(word);
+		cards.add(card);
+		
 	}
 	
 	protected void processWindowEvent(WindowEvent e)
