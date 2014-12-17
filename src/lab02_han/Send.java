@@ -20,7 +20,6 @@ public class Send extends JPanel
 	public Send()
 	{
 		list=new Vector<String>();
-		list.add("*All user");
 		input = new JComboBox<String>(list);
 		input.setPreferredSize(new Dimension(200,20));
 		this.setLayout(new FlowLayout(FlowLayout.LEFT,5,5));
@@ -51,13 +50,19 @@ public class Send extends JPanel
 	}
 	public void updateList(Vector<String> vec)
 	{
+		input.removeAllItems();
+		int count = 0;
 		list.removeAllElements();
 		for (String s: vec)
 		{
 			list.add(s);
+			count ++;
 		}
-		list.add("*All user");
-		input.validate();
+		if (count>0)
+			list.add("*All users");
+		input.revalidate();
+		
+		//input.validate();
 		
 		
 	}

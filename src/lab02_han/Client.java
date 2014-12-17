@@ -133,10 +133,11 @@ public class Client implements Runnable
 				{
 					handleSignUpFeedback(recv);
 				}
-				//更新在线用户列表
+				//更新在线用户列表和发送单词卡下拉表
 				else if (head=='3')
 				{
 					handleUpdateUserList(recv);
+					updateSendList();
 				}
 				
 				//处理单词卡信息
@@ -144,6 +145,8 @@ public class Client implements Runnable
 				{
 					handleSendWordCard(recv);
 				}
+				
+				//处理被迫下线
 				else if(head == '5')
 				{
 					handleForceLogOut(recv);
@@ -197,7 +200,6 @@ public class Client implements Runnable
 	private void handleSignInFeedback(String recv)
 	{
 		String[] temp = recv.split("&");
-		System.out.println(recv);
 		if (temp[0].equals("0"))//登录失败
 		{
 			MyDialog md = new MyDialog(ui,"提示",true,"用户名或密码错误");
@@ -217,15 +219,22 @@ public class Client implements Runnable
 			
 			ui.updateUserList(onlineUserList);
 			ui.online(username);
-			otherUserList.removeAllElements();
-			for (String str:onlineUserList)
-			{
-				if ( !str.equals(username))
-					otherUserList.add(str);
-			}
-			
-			ui.updateSendList(otherUserList);
+			updateSendList();
 		}
+	}
+	
+	//更新发送单词卡的用户名下拉表
+	private void updateSendList()
+	{
+		otherUserList.removeAllElements();
+		for (String str:onlineUserList)
+		{
+			if ( !str.equals(username))
+				otherUserList.add(str);
+	
+		}
+		
+		ui.updateSendList(otherUserList);
 	}
 	
 	//处理更新在线用户列表
@@ -261,13 +270,22 @@ public class Client implements Runnable
 	
 	private void handleSendWordCard(String recv)
 	{
-		
+		ui.text_area1.setText(recv);
+		final WordCard card = new WordCard();
+		card.setTitle("单词卡");
+		String[] temp = recv.split("&");
+		card.setContent(temp[0], temp[1]);
+		card.pack();
+		card.setLocationRelativeTo(null);
+		card.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		card.setVisible(true);
 	}
 	//处理被顶强迫下线
 	private void handleForceLogOut(String recv)
 	{
 		if (recv.endsWith("out"))
 		{
+			isOnline = false;
 			ui.logout();
 			onlineUserList.removeAllElements();
 			ui.updateUserList(onlineUserList);
@@ -479,9 +497,12 @@ public class Client implements Runnable
 	{	
 		public void actionPerformed(ActionEvent e)
 		{
+			isOnline = false;
 			String send = "3"+username+"*";
 			ui.logout();
 			onlineUserList.removeAllElements();
+			
+			updateSendList();
 			ui.updateUserList(onlineUserList);
 			
 			try 
@@ -501,20 +522,29 @@ public class Client implements Runnable
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			String send = ui.text_area1.getText();
+			String content = ui.text_area1.getText();
 			//String username = ui.send1.input.getText().trim();
 			String username = (String) ui.send1.input.getSelectedItem();
 			
 			if (isOnline)
 			{
-				if (username.length()>0)
+				if (username!=null )//&& username.length()>0)
 				{
-					if (send.length()>0)
+					if (content!=null && content.length()>0)
 					{
+						String send = "4"+ username+"&"+wordToSearch+"&"+ content +"*";
+						try 
+						{
+							toServer.writeChars(send);
+							toServer.flush();
+						} 
+						catch (IOException e1) 
+						{
+							e1.printStackTrace();
+						}
 						
 						
-						
-						MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
+						MyDialog md = new MyDialog(ui,"提示",true,"发送成功"+username);
 						md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					}
 					else

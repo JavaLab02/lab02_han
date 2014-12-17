@@ -142,10 +142,10 @@ public class Server extends JFrame
 						handleLogOut(recv);
 					}
 					
-					//向某在线用户发送单词卡
+					//发送单词卡请求
 					else if (head == '4')
 					{
-						
+						handleSendWordCard(recv);
 					}
 					
 					//处理客户端窗口关闭
@@ -170,6 +170,9 @@ public class Server extends JFrame
 					onlineClients.remove(index1);
 					onlineUser.remove(index2);
 					clients.remove(index3);
+					
+					//更新在线用户列表
+					updateOnlineUserList();
 				}
 				else
 				{
@@ -203,8 +206,7 @@ public class Server extends JFrame
 			 
 			 //Send Data
 			 outputToClient.writeChars(send);	
-			 jta.append("Data received from client: " + recv + "\n");
-			 jta.append("Server sends: " + send + "\n");
+			 
 		 }
 		 public void handleSignIn(String recv) throws IOException
 		 {
@@ -243,8 +245,7 @@ public class Server extends JFrame
 					 send += "*";
 					 Server.this.sendToOnline(send);
 					
-					 jta.append("Data received from client: " + recv + "\n");
-					 jta.append("Server sends: " + send + "\n");
+					 
 					 
 				 }
 				 //登录失败
@@ -252,8 +253,7 @@ public class Server extends JFrame
 				 {
 					 String send = "1" + "0*";
 					 outputToClient.writeChars(send);
-					 jta.append("Data received from client: " + recv + "\n");
-					 jta.append("Server sends: " + send + "\n");
+					
 				 }
 			 } 
 			 catch (ClassNotFoundException e) 
@@ -276,15 +276,13 @@ public class Server extends JFrame
 				{
 					String send = "2" + "1*";
 					outputToClient.writeChars(send);
-					jta.append("Data received from client: " + recv + "\n");
-					jta.append("Server sends: " + send + "\n");
+					
 				}
 				else 
 				{
 					String send = "2" + "0*";
 					outputToClient.writeChars(send);
-					jta.append("Data received from client: " + recv + "\n");
-					jta.append("Server sends: " + send + "\n");
+					
 				}
 			}
 			catch (ClassNotFoundException e) 
@@ -295,13 +293,34 @@ public class Server extends JFrame
 
 		 public void handleLogOut(String recv)
 		 {
+			 isOnline = false;
 			 int name_index = onlineUser.indexOf(recv);
 			 int client_index = onlineClients.indexOf(this);
 			 onlineUser.remove(name_index);
 			 onlineClients.remove(client_index);
-		
-				
-			 //更新在线用户
+			 //更新在线用户列表
+			 updateOnlineUserList();
+		 }
+		 
+		 public void handleSendWordCard(String recv)
+		 {
+			 String[] temp = recv.split("&");
+			 String send = "4"+temp[1]+"&"+temp[2]+"*";
+			 if (temp[0].equalsIgnoreCase("*All users"))
+			 {
+				 sendToOnline(send);
+			 }
+			 else
+			 {
+				 sendToUser(temp[0],send);
+				 System.out.println("in send user");
+			 }
+			 
+			 
+		 }
+		 
+		 public void updateOnlineUserList()
+		 {
 			 String send = "3"+"";
 			 boolean first = true;
 			 for (String name:onlineUser)
@@ -319,18 +338,10 @@ public class Server extends JFrame
 			 }
 			 send += "*";
 			 Server.this.sendToOnline(send);
-				
-			 jta.append("Data received from client: " + recv + "\n");
-			 jta.append("Server sends: " + send + "\n");
-		 }
-		 
-		 public void handleSendWordCard(String username, String word)
-		 {
-			 
-			 
-			 
 		 }
 	}
+	
+	
 	
 	public void sendmsg(DataOutputStream toClient,String msg)
 	{
@@ -355,8 +366,11 @@ public class Server extends JFrame
 	{
 		for (HandleAClient client: onlineClients)
 		{
-			if (client.name.equalsIgnoreCase(username));
+			if (client.name.equalsIgnoreCase(username))
+			{
+				System.out.println("send one "+client.name+" & "+username);
 				sendmsg(client.outputToClient,msg);
+			}
 		}
 	}
 	//删除重复登录，被顶下线
@@ -368,6 +382,7 @@ public class Server extends JFrame
 			if (client.name.equalsIgnoreCase(name)	)
 			{
 				String send = "5out*";
+				client.isOnline = false;
 				sendmsg(client.outputToClient,send);
 				onlineClients.remove(onlineClients.indexOf(client));
 				onlineUser.remove(onlineUser.indexOf(name));
