@@ -682,7 +682,12 @@ public class Client implements Runnable
 		public void actionPerformed(ActionEvent e)
 		{
 			String content = ui.text_area1.getText();
-			if(content.length()>0)	
+			if (isOnline==false)
+			{
+				MyDialog md = new MyDialog(ui,"提示",true,"请先登录");
+				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+			else if(content.length()>0)	
 			{
 				int i = Integer.parseInt(ui.send1.zan_count.getText());
 				if (ui.send1.zan.getText().equals("赞"))
@@ -720,7 +725,12 @@ public class Client implements Runnable
 		public void actionPerformed(ActionEvent e)
 		{
 			String content = ui.text_area2.getText();
-			if(content.length()>0)	
+			if (isOnline==false)
+			{
+				MyDialog md = new MyDialog(ui,"提示",true,"请先登录");
+				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+			else if(content.length()>0)	
 			{
 				int i = Integer.parseInt(ui.send2.zan_count.getText());
 				if (ui.send2.zan.getText().equals("赞"))
@@ -755,7 +765,12 @@ public class Client implements Runnable
 		public void actionPerformed(ActionEvent e)
 		{
 			String content = ui.text_area3.getText();
-			if(content.length()>0)	
+			if (isOnline==false)
+			{
+				MyDialog md = new MyDialog(ui,"提示",true,"请先登录");
+				md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+			else if(content.length()>0)	
 			{
 				int i = Integer.parseInt(ui.send3.zan_count.getText());
 				if (ui.send3.zan.getText().equals("赞"))

@@ -220,7 +220,7 @@ public class TranslateOnline {
 						}
 					}
 					if(sentenceEnglish.length() > 0||sentenceChinese.length() > 0)
-						noteOfWord = noteOfWord + "\n"+ "柯林斯高阶英汉词典/例句\n"+sentenceEnglish + "\n" + sentenceChinese;
+						noteOfWord = noteOfWord + "\r\n"+ "柯林斯高阶英汉词典/例句\r\n"+sentenceEnglish + "r\n" + sentenceChinese;
 					//System.out.println(noteOfWord);
 				}
 				else{
