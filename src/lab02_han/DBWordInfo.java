@@ -18,7 +18,7 @@ public class DBWordInfo {
 	public DBWordInfo(){
 		try {
 		Class.forName("com.mysql.jdbc.Driver");
-		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javabook","klyao","klyao");	
+		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/java","root","user");	
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

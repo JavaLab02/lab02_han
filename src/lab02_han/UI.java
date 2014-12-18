@@ -64,7 +64,8 @@ public class UI extends JFrame
 	 //单词卡列表相关变量
 	 JButton jbtcardlist = new JButton("我的单词卡");
 	 Vector <String> words = new Vector<String>();
-	 Vector <WordCard> cards = new Vector<WordCard>();
+	 //Vector <WordCard> cards = new Vector<WordCard>();
+	 Vector <WordCardPic> cards = new Vector<>();
 	
 	public UI()
 	{
@@ -751,7 +752,7 @@ public class UI extends JFrame
 	}
 	
 	
-	public void addWordCard(String word, WordCard card)
+	public void addWordCard(String word, WordCardPic card)
 	{
 		words.add(word);
 		cards.add(card);

@@ -273,8 +273,9 @@ public class Client implements Runnable
 		 
 		
 		String[] temp = recv.split("&");
-		WordCard card = new WordCard();
-		card.setContent(temp[0], temp[1]);
+		WordCardPic card = new WordCardPic(temp[0],temp[1]);
+		//WordCard card = new WordCard();
+		//card.setContent(temp[0], temp[1]);
 		ui.addWordCard(temp[0],card);
 		MyDialog md = new MyDialog(ui,"提示",true,"<html> <body> "+"您收到一张单词卡 ("+temp[0]+ ") <br> "+"请在“我的单词卡”中查看"+ " <body> </html> ");
 		md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

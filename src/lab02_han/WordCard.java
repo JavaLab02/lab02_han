@@ -6,6 +6,7 @@ import java.awt.Font;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
+
 public class WordCard extends JFrame
 {
 	public JTextArea jta = new JTextArea();
@@ -42,3 +43,4 @@ public class WordCard extends JFrame
 	}
 
 }
+

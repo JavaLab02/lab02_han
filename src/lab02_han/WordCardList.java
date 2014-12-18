@@ -11,7 +11,8 @@ import javax.swing.event.ListSelectionListener;
 public class WordCardList extends JFrame
 {
 	Vector <String> words = new Vector<String>();
-	Vector <WordCard> cards = new Vector<WordCard>();
+	Vector <WordCardPic> cards = new Vector<WordCardPic>();
+	//Vector <WordCard> cards = new Vector<WordCard>();
 	JList<String> list = new JList<String>(words);
 	JScrollPane jsp = new JScrollPane(list);
 	public WordCardList()
@@ -27,22 +28,20 @@ public class WordCardList extends JFrame
 				public void valueChanged(ListSelectionEvent e)
 				{
 					int index = list.getSelectedIndex();
-					String temp = words.elementAt(index);
-					if (temp.indexOf("(new)")!= -1)
-					{
-						words.setElementAt(temp.replace("(new)","").trim(), index);
-					}
-					final WordCard card = cards.elementAt(index);
+					
+					final WordCardPic card = cards.elementAt(index);
 					card.setTitle("µ¥´Ê¿¨");
 					card.pack();
 					card.setLocationRelativeTo(null);
 					card.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					card.setVisible(true);
+					card.setSize(400, 400);
+				
 				}
 			}
 		);
 	}
-	
+	/*
 	public void setContent(Vector<String> vec1, Vector<WordCard> vec2)
 	{
 		words.removeAllElements();
@@ -51,7 +50,15 @@ public class WordCardList extends JFrame
 		cards.addAll(vec2);
 		list.setListData(words);
 	}
-
+	*/
+	public void setContent(Vector<String> vec1, Vector<WordCardPic> vec2)
+	{
+		words.removeAllElements();
+		cards.removeAllElements();
+		words.addAll(vec1);
+		cards.addAll(vec2);
+		list.setListData(words);
+	}
 		
 	public static void main(String[] args) 
 	{
