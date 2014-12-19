@@ -22,6 +22,7 @@ public class WordCardPic extends JFrame
 	public JPanel p = new JPanel();
 	public WordCardPic(String word, String definitions)
 	{
+		this.setResizable(false);
 		wordCard = new WordCardCreate(word,definitions);
 		image =  wordCard.createCard();
 		card = new CardComponent(image,word);

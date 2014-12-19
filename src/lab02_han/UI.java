@@ -66,9 +66,12 @@ public class UI extends JFrame
 	 Vector <String> words = new Vector<String>();
 	 //Vector <WordCard> cards = new Vector<WordCard>();
 	 Vector <WordCardPic> cards = new Vector<>();
+	 
+	 JButton jbtchat = new JButton("聊天室");
 	
 	public UI()
 	{
+		this.setResizable(false);
 		//设置自动换行
 		text_area1.setLineWrap(true);
 		text_area2.setLineWrap(true);
@@ -174,6 +177,8 @@ public class UI extends JFrame
 		add(p_north,BorderLayout.NORTH);
 		add(p_south,BorderLayout.SOUTH);
 		
+	
+		
 		jbtcardlist.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -226,6 +231,7 @@ public class UI extends JFrame
 		p1.add(jlabel);
 		p1.add(log_out);
 		p1.add(jbtcardlist);
+		p1.add(jbtchat);
 		p1.validate();
 		p1.repaint();
 		

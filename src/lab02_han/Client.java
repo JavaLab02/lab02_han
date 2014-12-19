@@ -30,6 +30,8 @@ public class Client implements Runnable
 	//是否在线
 	boolean isOnline;
 	
+	ChatRoomClient chatroom;
+	
 	//construction method
 	public Client()
 	{
@@ -70,6 +72,18 @@ public class Client implements Runnable
 		//Bing翻译框的send和点赞
 		ui.send3.send.addActionListener(new sendBing());
 		ui.send3.zan.addActionListener(new zanBing());
+		
+		
+		ui.jbtchat.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if(!chatroom.chatFrame.isVisible());
+				{
+					chatroom.chatFrame.setVisible(true);
+				}
+			}
+		});
 		
 		ConnectionToServer();
 		Thread thread = new Thread(this);
@@ -226,6 +240,7 @@ public class Client implements Runnable
 	//更新发送单词卡的用户名下拉表
 	private void updateSendList()
 	{
+		/*
 		otherUserList.removeAllElements();
 		for (String str:onlineUserList)
 		{
@@ -233,8 +248,9 @@ public class Client implements Runnable
 				otherUserList.add(str);
 	
 		}
-		
 		ui.updateSendList(otherUserList);
+		*/
+		ui.updateSendList(onlineUserList);
 	}
 	
 	//处理更新在线用户列表
@@ -293,7 +309,7 @@ public class Client implements Runnable
 	//处理被顶强迫下线
 	private void handleForceLogOut(String recv)
 	{
-		if (recv.endsWith("out"))
+		if (recv.equals("out"))
 		{
 			isOnline = false;
 			ui.logout();
@@ -402,6 +418,9 @@ public class Client implements Runnable
 							toServer.flush();
 							username = account;
 							signin.dispose();
+							chatroom = new ChatRoomClient(username);
+							chatroom.chatFrame.setVisible(false);
+							
 							
 						}
 						else

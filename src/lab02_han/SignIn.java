@@ -29,7 +29,7 @@ public class SignIn extends JFrame
 	
 	public SignIn() 
 	{
-		
+		this.setResizable(false);
 		password.setEchoChar('*');
 		JPanel p1 = new JPanel();
 		p1.setLayout(new FlowLayout(FlowLayout.LEFT,5,5));

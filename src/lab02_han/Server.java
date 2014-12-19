@@ -148,12 +148,7 @@ public class Server extends JFrame
 						handleSendWordCard(recv);
 					}
 					
-					//处理客户端窗口关闭
-					else if (head=='-')
-					{
-						
-						
-					}
+					
 						
 				}
 				
@@ -306,7 +301,7 @@ public class Server extends JFrame
 		 {
 			 String[] temp = recv.split("&");
 			 String send = "4"+temp[1]+"&"+temp[2]+"*";
-			 if (temp[0].equalsIgnoreCase("*All users"))
+			 if (temp[0].equalsIgnoreCase("#All users"))
 			 {
 				 sendToOnline(send);
 			 }

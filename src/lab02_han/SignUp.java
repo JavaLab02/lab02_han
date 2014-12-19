@@ -31,7 +31,7 @@ public class SignUp extends JFrame
 	public JCheckBox echoPassword = new JCheckBox("œ‘ æ√‹¬Î");
 	public SignUp() 
 	{
-		
+		this.setResizable(false);
 		password.setEchoChar('*');
 		confirmPassword.setEchoChar('*');
 		JPanel p1 = new JPanel();

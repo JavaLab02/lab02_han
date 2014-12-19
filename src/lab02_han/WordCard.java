@@ -14,6 +14,7 @@ public class WordCard extends JFrame
 	public TitledBorder bd = new TitledBorder("Word Card");
 	public WordCard()
 	{
+		this.setResizable(false);
 		Font font1 = new Font("Default",Font.PLAIN,30);
 		Font font2 = new Font("Default",Font.PLAIN,20);
 	

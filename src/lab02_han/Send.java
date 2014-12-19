@@ -51,20 +51,14 @@ public class Send extends JPanel
 	public void updateList(Vector<String> vec)
 	{
 		input.removeAllItems();
-		int count = 0;
+		
 		list.removeAllElements();
 		for (String s: vec)
 		{
 			list.add(s);
-			count ++;
 		}
-		if (count>0)
-			list.add("*All users");
-		input.revalidate();
-		
-		//input.validate();
-		
-		
+		list.add("#All users");
+		input.revalidate();	
 	}
 	
 
