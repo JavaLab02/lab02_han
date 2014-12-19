@@ -189,6 +189,19 @@ public class ChatRoomClient implements Runnable
 		
 	}
 	
+	void logout()
+	{
+		try 
+		{
+			toServer.writeChars("3*");
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+	}
+	
 	void handleLogOut(String recv)
 	{
 		if (recv.equals("out"))

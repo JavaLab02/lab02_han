@@ -543,6 +543,7 @@ public class Client implements Runnable
 			{
 				e1.printStackTrace();
 			}
+			chatroom.logout();
 			
 		}
 	}

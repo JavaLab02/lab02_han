@@ -142,8 +142,25 @@ public class ServerChatRoom extends JFrame
 					{
 						InetAddress inetAddress = socket.getInetAddress();
 						String content = "2"+ name +"("+inetAddress.getHostAddress()+")" + new Date()+'\n'+"&"+recv+'\n'+"*";
-						
 						sendToOnline(content);
+					}
+					
+					//下线
+					else if (head=='3')
+					{
+						int index1 = onlineClients.indexOf(this);
+						int index2 = onlineUser.indexOf(name);
+						int index3 = allClients.indexOf(this);
+						//System.out.println("Online+ "+index1+" "+" "+index2);
+						onlineClients.remove(index1);
+						onlineUser.remove(index2);
+						allClients.remove(index3);
+						
+						//更新在线用户列表
+						sendUserListMsg();
+						isOnline = false;
+						jta.append("Client "+ this.no +" socket closed! \n");
+						
 						
 					}
 					
@@ -173,8 +190,11 @@ public class ServerChatRoom extends JFrame
 				{
 					
 					int index = allClients.indexOf(this);
-					//System.out.println("off line "+index);
-					allClients.remove(index);
+					if (index>=0)
+					{
+						allClients.remove(index);
+					}
+					
 				}
 				
 				jta.append("Client "+ this.no +" socket closed! \n");
