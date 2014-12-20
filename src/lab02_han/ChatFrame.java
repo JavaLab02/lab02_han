@@ -8,10 +8,12 @@ import java.awt.GridLayout;
 import java.awt.event.WindowEvent;
 import java.util.Vector;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -25,10 +27,12 @@ import javax.swing.text.StyleConstants;
 
 public class ChatFrame extends JFrame
 {
-	//JTextArea jta1 = new JTextArea();
 	JTextArea jta2 = new JTextArea();
 	 JTextPane jtp = new JTextPane();  
-	JButton jbt = new JButton("发送");
+	JButton jbt = new JButton("发送文字");
+	JButton jbt2 = new JButton("发送图片");
+	JLabel space = new JLabel("     "); 
+	SelectPicFrame sel = new SelectPicFrame();
 	Vector<String> user_list = new Vector<String>();
 	JList<String> jlist = new JList<String>(user_list);
 	
@@ -39,13 +43,13 @@ public class ChatFrame extends JFrame
 	ChatFrame()
 	{
 		this.setResizable(false);
+		jtp.setEditable(false);
 		TitledBorder bd1 = new TitledBorder("对话框");
 		TitledBorder bd2 = new TitledBorder("输入框");
 		TitledBorder bd3 = new TitledBorder("用户列表");
-		//jta1.setLineWrap(true);
+		
 		jta2.setLineWrap(true);
 		
-		//jta1.setEditable(false);
 		jsp1.setPreferredSize(new Dimension(500,440));
 		jsp2.setPreferredSize(new Dimension(500,160));
 		jsp3.setPreferredSize(new Dimension(200,605));
@@ -58,6 +62,9 @@ public class ChatFrame extends JFrame
 	    jsp3.setBorder(bd3);
 	    JPanel p2 = new JPanel();
 	    p2.setLayout(new FlowLayout(FlowLayout.RIGHT,5,5));
+	    p2.add(sel);
+	    p2.add(jbt2);
+	    p2.add(space);
 	    p2.add(jbt);
 	    
 	    JPanel p3 = new JPanel();
@@ -72,7 +79,27 @@ public class ChatFrame extends JFrame
 	    add(p3, BorderLayout.WEST);
 	    add(p4, BorderLayout.EAST);
 	    this.setVisible(false);
-	    
+	    /*
+	    jlist.addListSelectionListener
+		(
+			new ListSelectionListener()
+			{
+				public void valueChanged(ListSelectionEvent e)
+				{
+					//int index = jlist.getSelectedIndex();
+					String name = jlist.getSelectedValue(); 
+					final ChatDialog frame = new ChatDialog();
+					frame.setTitle(name);
+					frame.pack();
+					frame.setLocationRelativeTo(null);
+					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					frame.setVisible(true);
+					
+				
+				}
+			}
+		);
+	    */
 	}
 	
 	protected void processWindowEvent(WindowEvent e)
@@ -94,9 +121,9 @@ public class ChatFrame extends JFrame
 		jlist.setListData(list);
 	}
 	
-	public   void   insert(String   str,   AttributeSet   attrSet)   
+	public void insert(String   str,   AttributeSet   attrSet)   
 	{   
-        Document   doc   =   jtp.getDocument();   
+        Document  doc = jtp.getDocument();   
         try   
         {   
             doc.insertString(doc.getLength(),   str,   attrSet);   
@@ -107,18 +134,35 @@ public class ChatFrame extends JFrame
         }   
     }  
 	
-	public   void   setDocs(String   str,Color   col,boolean   bold,int   fontSize)   
+	public void setDocs(String str, Color col, boolean bold, int fontSize)   
 	{   
-        SimpleAttributeSet   attrSet   =   new   SimpleAttributeSet();   
-        StyleConstants.setForeground(attrSet,   col);   
+        SimpleAttributeSet attrSet = new SimpleAttributeSet();   
+        StyleConstants.setForeground(attrSet, col);   
         //颜色   
-        if(bold==true){   
-            StyleConstants.setBold(attrSet,   true);   
+        if(bold==true)
+        {   
+            StyleConstants.setBold(attrSet, true);   
         }//字体类型   
-        StyleConstants.setFontSize(attrSet,   fontSize);   
+        StyleConstants.setFontSize(attrSet, fontSize);   
         //字体大小   
-        insert(str,   attrSet);   
+        insert(str, attrSet);   
     }   
+	public void setPic(String path)
+	{
+		 Icon image = new ImageIcon(path);
+		 Document doc = jtp.getDocument();
+		 jtp.setCaretPosition(doc.getLength());
+		 jtp.insertIcon(image);
+		 SimpleAttributeSet attrSet = new SimpleAttributeSet(); 
+		 try {
+			doc.insertString(doc.getLength(), "\n",attrSet);
+		} catch (BadLocationException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		 
+	}
+	
 	
 	public static void main(String[] args) 
 	{

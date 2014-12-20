@@ -136,12 +136,14 @@ public class ServerChatRoom extends JFrame
 						sendUserListMsg();
 						
 					}
+				
 					
-					//聊天信息
+					
+					//聊天室聊天信息
 					else if (head=='2')
 					{
 						InetAddress inetAddress = socket.getInetAddress();
-						String content = "2"+ name +"("+inetAddress.getHostAddress()+")" + new Date()+'\n'+"&"+recv+'\n'+"*";
+						String content = "2"+ name +" ("+inetAddress.getHostAddress()+")" + new Date()+'\n'+"&"+recv+'\n'+"*";
 						sendToOnline(content);
 					}
 					
@@ -161,7 +163,19 @@ public class ServerChatRoom extends JFrame
 						isOnline = false;
 						jta.append("Client "+ this.no +" socket closed! \n");
 						
-						
+					}
+					//receive picture
+					else if (head=='4')
+					{
+						String[] temp = recv.split("&");
+						try 
+						{
+							handlePic(temp[0],temp[1]);
+						} 
+						catch (Exception e) 
+						{
+							e.printStackTrace();
+						}
 					}
 					
 					
@@ -201,10 +215,64 @@ public class ServerChatRoom extends JFrame
 				System.out.println(ex+"断开连接");
 			}
 		}
+		
+		byte[] image2Bytes(String imgSrc) throws Exception
+		{
+			FileInputStream fin = new FileInputStream(new File(imgSrc));
+			//可能溢出,简单起见就不考虑太多,如果太大就要另外想办法，比如一次传入固定长度byte[]
+			byte[] bytes  = new byte[fin.available()];
+			//将文件内容写入字节数组，提供测试的case
+			fin.read(bytes);
+			fin.close();
+			return bytes;
+		}
+		void buff2Image(byte[] b,String tagSrc) throws Exception
+		{
+			FileOutputStream fout = new FileOutputStream(tagSrc);
+			//将字节写入文件
+			fout.write(b);
+			fout.close();
+		}
+		
+		
+		void handlePic(String recv, String picname) throws Exception
+		{
+			//图片数据长度
+			int len=Integer.parseInt(recv);
+			//图片数据
+			byte[] b = new byte[len];
+			//接收图片数据
+			inputFromClient.readFully(b);
+			sendPicToAllClient(b, picname);
+			
+			
+		}
+		void sendPicToAllClient(byte[] b, String picname) throws Exception
+		{
+	        int len = b.length;
+	        
+	        for (HandleAClient client: onlineClients)
+	        {
+	        	 try 
+	 	        {	
+	        		InetAddress inetAddress = socket.getInetAddress();
+	        		String user = this.name+" ("+inetAddress.getHostAddress()+")" + new Date()+"\n";
+	 	        	client.outputToClient.writeChars("4");
+	 	        	client.outputToClient.writeChars(len+"&"+picname+"&"+user+"*");
+	 	        	client.outputToClient.write(b);
+	 	        	client.outputToClient.flush();
+	 			} 
+	 	        catch (IOException e) 
+	 	        {
+	 				e.printStackTrace();
+	 			}
+	        }
+		}
+		
 			
 		public void sendUserListMsg()
 		{
-			 String send = "1";
+			 String send = "0";
 			 boolean first = true;
 			 for (String name:onlineUser)
 			 {
@@ -241,17 +309,8 @@ public class ServerChatRoom extends JFrame
 				sendmsg(client.outputToClient,msg);
 			}
 		}
+	
 		
-		public void sendToUser(String username, String msg)
-		{
-			for (HandleAClient client: onlineClients)
-			{
-				if (client.name.equalsIgnoreCase(username))
-				{
-					sendmsg(client.outputToClient,msg);
-				}
-			}
-		}
 		
 		
 		//删除重复登录，被顶下线
