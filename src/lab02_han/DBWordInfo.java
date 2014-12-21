@@ -40,8 +40,8 @@ public class DBWordInfo {
 				return wordInfo;
 			}
 			return "0&0&0";
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} catch (SQLException e) 
+		{
 			e.printStackTrace();
 		}
 		return "0&0&0";

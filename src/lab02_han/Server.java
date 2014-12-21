@@ -9,6 +9,8 @@ import java.util.*;
 
 import javax.swing.*;
 
+import lab02_han.ServerChatRoom.HandleAClient;
+
 
 
 @SuppressWarnings("serial")
@@ -145,7 +147,18 @@ public class Server extends JFrame
 					//发送单词卡请求
 					else if (head == '4')
 					{
-						handleSendWordCard(recv);
+						//handleSendWordCard(recv);
+						String []temp = recv.split("&");
+						try 
+						{
+							//len , pic_name, to_user
+							handlePic(temp[0], temp[1], temp[2]);
+						} 
+						catch (Exception e) 
+						{
+							
+							e.printStackTrace();
+						}
 					}
 					
 					
@@ -182,6 +195,20 @@ public class Server extends JFrame
 				
 			}
 		}
+		
+		void handlePic(String length, String picname,String touser) throws Exception
+		{
+			//图片数据长度
+			int len=Integer.parseInt(length);
+			//图片数据
+			byte[] b = new byte[len];
+			//接收图片数据
+			inputFromClient.readFully(b);
+			sendPicToClient(b, picname, touser);
+			
+			
+		}
+	
 		
 		
 		
@@ -335,8 +362,56 @@ public class Server extends JFrame
 		 }
 	}
 	
+	public void sendPicToClient(byte[] b, String picname,String touser) throws Exception
+	{
+        int len = b.length;
+        
+    
+        if (touser.equalsIgnoreCase("#All users"))
+        {
+        	 for (HandleAClient client: onlineClients)
+             {
+        		 try 
+   	 	        {	
+   	        		
+   	 	        	client.outputToClient.writeChars("4");
+   	 	        	client.outputToClient.writeChars(len+"&"+picname+"*");
+   	 	        	client.outputToClient.write(b);
+   	 	        	client.outputToClient.flush();
+   	 			} 
+   	 	        catch (IOException e) 
+   	 	        {
+   	 				e.printStackTrace();
+   	 			}	
 	
-	
+             }
+        }
+        else
+        {
+        	 for (HandleAClient client: onlineClients)
+             {
+             	if (client.name.equals(touser))
+             	{
+             		try 
+      	 	        {	
+      	        		
+      	 	        	client.outputToClient.writeChars("4");
+      	 	        	client.outputToClient.writeChars(len+"&"+picname+"*");
+      	 	        	client.outputToClient.write(b);
+      	 	        	client.outputToClient.flush();
+      	 			} 
+      	 	        catch (IOException e) 
+      	 	        {
+      	 				e.printStackTrace();
+      	 			}
+             	}
+             	
+             }
+        }
+        
+       
+	}
+
 	public void sendmsg(DataOutputStream toClient,String msg)
 	{
 		try 

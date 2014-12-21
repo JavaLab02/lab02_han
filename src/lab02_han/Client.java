@@ -157,7 +157,16 @@ public class Client implements Runnable
 				//处理接收单词卡信息
 				else if (head=='4')
 				{
-					handleReceiveWordCard(recv);
+					//handleReceiveWordCard(recv);
+					String []temp = recv.split("&");
+					try 
+					{
+						receivePic(temp[0],temp[1]);
+					} 
+					catch (Exception e) 
+					{
+						e.printStackTrace();
+					}
 				}
 				
 				//处理被迫下线
@@ -284,6 +293,7 @@ public class Client implements Runnable
 		}
 	}
 	
+	/*
 	private void handleReceiveWordCard(String recv)
 	{
 		 
@@ -295,17 +305,11 @@ public class Client implements Runnable
 		ui.addWordCard(temp[0],card);
 		MyDialog md = new MyDialog(ui,"提示",true,"<html> <body> "+"您收到一张单词卡 ("+temp[0]+ ") <br> "+"请在“我的单词卡”中查看"+ " <body> </html> ");
 		md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		/*
-		final WordCard card = new WordCard();
-		card.setTitle("单词卡");
-		String[] temp = recv.split("&");
-		card.setContent(temp[0], temp[1]);
-		card.pack();
-		card.setLocationRelativeTo(null);
-		card.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		card.setVisible(true);
-		*/
+		
 	}
+	*/
+	
+	
 	//处理被顶强迫下线
 	private void handleForceLogOut(String recv)
 	{
@@ -548,12 +552,12 @@ public class Client implements Runnable
 		}
 	}
 	
+	
 	private class sendBaidu implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			String content = ui.text_area1.getText();
-			//String username = ui.send1.input.getText().trim();
 			String username = (String) ui.send1.input.getSelectedItem();
 			
 			if (isOnline)
@@ -562,17 +566,15 @@ public class Client implements Runnable
 				{
 					if (content!=null && content.length()>0)
 					{
-						String send = "4"+ username+"&"+wordToSearch+"&"+ content +"*";
-						try 
-						{
-							toServer.writeChars(send);
-							toServer.flush();
-						} 
-						catch (IOException e1) 
-						{
+						WordCardPic temp = new WordCardPic(wordToSearch+"_baidu",content);
+						String path = "./mywordcard/local/"+wordToSearch+"_baidu.jpg";
+						
+						try {
+							sendPic(path, wordToSearch+"_baidu", username);
+						} catch (Exception e1) {
+							// TODO 自动生成的 catch 块
 							e1.printStackTrace();
 						}
-						
 						
 						MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
 						md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -609,21 +611,19 @@ public class Client implements Runnable
 			
 			if (isOnline)
 			{
-				if (username!=null )//&& username.length()>0)
+				if (username!=null )
 				{
 					if (content!=null && content.length()>0)
 					{
-						String send = "4"+ username+"&"+wordToSearch+"&"+ content +"*";
-						try 
-						{
-							toServer.writeChars(send);
-							toServer.flush();
-						} 
-						catch (IOException e1) 
-						{
+						WordCardPic temp = new WordCardPic(wordToSearch+"_youdao",content);
+						String path = "./mywordcard/local/"+wordToSearch+"_youdao.jpg";
+						
+						try {
+							sendPic(path, wordToSearch+"_youdao", username);
+						} catch (Exception e1) {
+							// TODO 自动生成的 catch 块
 							e1.printStackTrace();
 						}
-						
 						
 						MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
 						md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -657,21 +657,19 @@ public class Client implements Runnable
 			String username = (String) ui.send3.input.getSelectedItem();
 			if (isOnline)
 			{
-				if (username!=null )//&& username.length()>0)
+				if (username!=null )
 				{
 					if (content!=null && content.length()>0)
 					{
-						String send = "4"+ username+"&"+wordToSearch+"&"+ content +"*";
-						try 
-						{
-							toServer.writeChars(send);
-							toServer.flush();
-						} 
-						catch (IOException e1) 
-						{
+						WordCardPic temp = new WordCardPic(wordToSearch+"_Bing",content);
+						String path = "./mywordcard/local/"+wordToSearch+"_Bing.jpg";
+						
+						try {
+							sendPic(path, wordToSearch+"_Bing", username);
+						} catch (Exception e1) {
+							// TODO 自动生成的 catch 块
 							e1.printStackTrace();
 						}
-						
 						
 						MyDialog md = new MyDialog(ui,"提示",true,"发送成功");
 						md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -868,7 +866,52 @@ public class Client implements Runnable
 	}
 	
 	
-
+	static byte[] image2Bytes(String imgSrc) throws Exception
+	{
+		FileInputStream fin = new FileInputStream(new File(imgSrc));
+		byte[] bytes  = new byte[fin.available()];
+		fin.read(bytes);
+		fin.close();
+		return bytes;
+	}
+	void buff2Image(byte[] b,String tagSrc) throws Exception
+	{
+		FileOutputStream fout = new FileOutputStream(tagSrc);
+		//将字节写入文件
+		fout.write(b);
+		fout.close();
+	}
+	
+	void sendPic(String path,String picname, String touser) throws Exception
+	{
+        byte[] b = image2Bytes(path);
+        int len = b.length;
+        try 
+        {	
+        	toServer.writeChars("4");
+			toServer.writeChars(len+"&"+picname+"&"+touser+"*");
+			toServer.write(b);
+			toServer.flush();
+		} 
+        catch (IOException e) 
+        {
+			e.printStackTrace();
+		}
+       
+       
+	}
+	void receivePic(String length,String picname) throws Exception
+	{
+		int len=Integer.parseInt(length);
+		byte[] b = new byte[len];
+		fromServer.readFully(b);
+		
+		String path = "./mywordcard/received/"+picname+".jpg";
+		buff2Image(b,path);
+		MyDialog md = new MyDialog(ui,"提示",true,"<html> <body> "+"您收到一张单词卡 ("+picname+ ") <br> "+"请在“我的单词卡”中查看"+ " <body> </html> ");
+		md.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+	}
 
 	
 	

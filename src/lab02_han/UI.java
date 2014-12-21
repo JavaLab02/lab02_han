@@ -60,17 +60,24 @@ public class UI extends JFrame
 	 int zan_baidu;
 	 int zan_youdao;
 	 int zan_bing;
-	 
+	 /*
 	 //单词卡列表相关变量
 	 JButton jbtcardlist = new JButton("我的单词卡");
 	 Vector <String> words = new Vector<String>();
 	 //Vector <WordCard> cards = new Vector<WordCard>();
 	 Vector <WordCardPic> cards = new Vector<>();
-	 
+	 */
 	 JButton jbtchat = new JButton("聊天室");
+	 
+	 JButton mywordcard = new JButton("我的单词卡");
+	 
+	 ViewPic viewpic = new ViewPic();
 	
 	public UI()
 	{
+		viewpic.pack();
+		viewpic.setLocationRelativeTo(null);
+		viewpic.setVisible(false);
 		this.setResizable(false);
 		//设置自动换行
 		text_area1.setLineWrap(true);
@@ -178,7 +185,7 @@ public class UI extends JFrame
 		add(p_south,BorderLayout.SOUTH);
 		
 	
-		
+		/*
 		jbtcardlist.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -189,6 +196,21 @@ public class UI extends JFrame
 				temp.setContent(words, cards);
 				temp.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 				temp.pack();
+			}
+		});
+		*/
+		mywordcard.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if (viewpic.isVisible())
+				{
+					
+				}
+				else
+				{
+					viewpic.setVisible(true);
+				}
 			}
 		});
 		
@@ -230,8 +252,9 @@ public class UI extends JFrame
 		p1.add(new JLabel("Welcome !    "));
 		p1.add(jlabel);
 		p1.add(log_out);
-		p1.add(jbtcardlist);
+		//p1.add(jbtcardlist);
 		p1.add(jbtchat);
+		p1.add(mywordcard);
 		p1.validate();
 		p1.repaint();
 		
@@ -757,13 +780,14 @@ public class UI extends JFrame
 		send3.updateList(vec);
 	}
 	
-	
+	/*
 	public void addWordCard(String word, WordCardPic card)
 	{
 		words.add(word);
 		cards.add(card);
 		
 	}
+	*/
 	
 	protected void processWindowEvent(WindowEvent e)
 	{
