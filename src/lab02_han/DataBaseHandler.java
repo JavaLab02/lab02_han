@@ -75,7 +75,7 @@ public class DataBaseHandler
 	{
 		
 		String query1 = "select count(*) from userinfo where name='"+name+"';";
-		String query2 = "insert into userinfo values('"+name+"','"+password+"');";
+		String query2 = "insert into userinfo values('"+name+"','"+password+"','null','null');";
 		//String query2 = "insert into userinfo values('tom','123');";
 		
 		ResultSet rs;
@@ -139,30 +139,14 @@ public class DataBaseHandler
 	
 	public static void main(String[] args) throws SQLException, ClassNotFoundException
 	{
-			DataBaseHandler db = new DataBaseHandler();
-			
-			/*
-			String q = "select * from Employees";
-
-			ResultSet resultSet = DataBaseHandler.exeQuery(q);
-			
-			
-			while (resultSet.next())
-			{
-				System.out.println(resultSet.getString(1)+"\t" +
-					resultSet.getString(2)+"\t"+resultSet.getString(3));
-			}
-			*/
-			//System.out.println(DataBaseHandler.regUser("han", "123"));
-			//System.out.println(DataBaseHandler.regUser("Bob", "123"));
-			//System.out.println(DataBaseHandler.getUsersNum());
+			DataBaseHandler db = new DataBaseHandler ();
 			List<String> names = db.getUsersName();
 			for (String str:names)
 			{
 				System.out.println(str);
 			}
-			
-				
+			String query2 = "insert into userinfo values('Tonny','123','null','null');";
+			DataBaseHandler.exeUpdateQuery(query2);	
 
 	}
 }

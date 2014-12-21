@@ -866,7 +866,7 @@ public class Client implements Runnable
 	}
 	
 	
-	static byte[] image2Bytes(String imgSrc) throws Exception
+	byte[] image2Bytes(String imgSrc) throws Exception
 	{
 		FileInputStream fin = new FileInputStream(new File(imgSrc));
 		byte[] bytes  = new byte[fin.available()];
