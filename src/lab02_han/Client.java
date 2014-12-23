@@ -97,7 +97,7 @@ public class Client implements Runnable
 		try
 		{
 			//Create a socket to connect to the server
-			Socket socket = new Socket("localhost", 8000);
+			Socket socket = new Socket("192.168.191.2", 8000);
 			
 			//Create an input stream to receive data from server
 			fromServer = new DataInputStream(socket.getInputStream());
@@ -714,7 +714,17 @@ public class Client implements Runnable
 					i +=1;
 					ui.send1.zan_count.setText(""+i);
 					ui.send1.label.setVisible(true);
-					wordinfo.Update(wordToSearch, 1, 0, 0);
+					//wordinfo.Update(wordToSearch, 1, 0, 0);
+					try {
+						toServer.writeChars("5"+wordToSearch+"*");
+						toServer.writeInt(1);
+						toServer.writeInt(0);
+						toServer.writeInt(0);
+					} catch (IOException e1) {
+						// TODO 自动生成的 catch 块
+						e1.printStackTrace();
+					}
+					
 						
 				}
 				else
@@ -723,7 +733,16 @@ public class Client implements Runnable
 					i -= 1;
 					ui.send1.zan_count.setText(""+i);
 					ui.send1.label.setVisible(false);
-					wordinfo.Update(wordToSearch, -1, 0, 0);
+					//wordinfo.Update(wordToSearch, -1, 0, 0);
+					try {
+						toServer.writeChars("5"+wordToSearch+"*");
+						toServer.writeInt(-1);
+						toServer.writeInt(0);
+						toServer.writeInt(0);
+					} catch (IOException e1) {
+						// TODO 自动生成的 catch 块
+						e1.printStackTrace();
+					}
 							
 				}
 			}
@@ -757,7 +776,16 @@ public class Client implements Runnable
 					i +=1;
 					ui.send2.zan_count.setText(""+i);
 					ui.send2.label.setVisible(true);
-					wordinfo.Update(wordToSearch, 0, 1, 0);
+					//wordinfo.Update(wordToSearch, 0, 1, 0);
+					try {
+						toServer.writeChars("5"+wordToSearch+"*");
+						toServer.writeInt(0);
+						toServer.writeInt(1);
+						toServer.writeInt(0);
+					} catch (IOException e1) {
+						// TODO 自动生成的 catch 块
+						e1.printStackTrace();
+					}
 						
 				}
 				else
@@ -766,7 +794,16 @@ public class Client implements Runnable
 					ui.send2.zan_count.setText(""+i);
 					ui.send2.zan.setText("赞");
 					ui.send2.label.setVisible(false);
-					wordinfo.Update(wordToSearch, 0, -1, 0);
+					//wordinfo.Update(wordToSearch, 0, -1, 0);
+					try {
+						toServer.writeChars("5"+wordToSearch+"*");
+						toServer.writeInt(0);
+						toServer.writeInt(-1);
+						toServer.writeInt(0);
+					} catch (IOException e1) {
+						// TODO 自动生成的 catch 块
+						e1.printStackTrace();
+					}
 							
 				}
 			}
@@ -797,7 +834,16 @@ public class Client implements Runnable
 					i += 1;
 					ui.send3.zan_count.setText(""+i);
 					ui.send3.label.setVisible(true);
-					wordinfo.Update(wordToSearch, 0, 0, 1);
+					//wordinfo.Update(wordToSearch, 0, 0, 1);
+					try {
+						toServer.writeChars("5"+wordToSearch+"*");
+						toServer.writeInt(0);
+						toServer.writeInt(0);
+						toServer.writeInt(1);
+					} catch (IOException e1) {
+						// TODO 自动生成的 catch 块
+						e1.printStackTrace();
+					}
 						
 				}
 				else
@@ -806,7 +852,16 @@ public class Client implements Runnable
 					i -= 1;
 					ui.send3.zan_count.setText(""+i);
 					ui.send3.label.setVisible(false);
-					wordinfo.Update(wordToSearch, 0, 0, -1);
+					//wordinfo.Update(wordToSearch, 0, 0, -1);
+					try {
+						toServer.writeChars("5"+wordToSearch+"*");
+						toServer.writeInt(0);
+						toServer.writeInt(0);
+						toServer.writeInt(-1);
+					} catch (IOException e1) {
+						// TODO 自动生成的 catch 块
+						e1.printStackTrace();
+					}
 							
 				}
 			}

@@ -134,7 +134,7 @@ public class ChatRoomClient implements Runnable
 		try
 		{
 			//Create a socket to connect to the server
-			Socket socket = new Socket("localhost", 8001);
+			Socket socket = new Socket("192.168.191.2", 8001);
 			
 			//Create an input stream to receive data from server
 			fromServer = new DataInputStream(socket.getInputStream());

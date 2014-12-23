@@ -23,9 +23,10 @@ public class Server extends JFrame
 	static Vector<String> onlineUser;
 	//Number of clients
 	int clientNo = 0;
-	
+	DBWordInfo wordinfo;
 	public Server()
 	{
+		wordinfo = new DBWordInfo();
 		clients = new ArrayList<HandleAClient>();
 		onlineClients = new ArrayList<HandleAClient>();
 		onlineUser = new Vector<String>();
@@ -160,6 +161,16 @@ public class Server extends JFrame
 							e.printStackTrace();
 						}
 					}
+					//µãÔÞ
+					else if (head=='5')	
+					{
+						int n1 = inputFromClient.readInt();
+						int n2 = inputFromClient.readInt();
+						int n3 = inputFromClient.readInt();
+						System.out.print("  "+n1+n2+n3);
+						wordinfo.Update(recv,n1, n2, n3);
+					}
+						
 					
 					
 						
